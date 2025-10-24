@@ -1,0 +1,14 @@
+[gd_scene load_steps=3 format=3 uid="uid://kvjcgugvhw8a"]
+
+[ext_resource type="PackedScene" uid="uid://3ffbqokcdysi" path="res://scenes/player.tscn" id="1_bswci"]
+[ext_resource type="PackedScene" uid="uid://br5apb2urv30b" path="res://scenes/ground.tscn" id="2_rus8k"]
+
+[node name="Level1" type="Node2D"]
+
+[node name="Player" parent="." instance=ExtResource("1_bswci")]
+position = Vector2(0, -142)
+
+[node name="Ground" parent="." instance=ExtResource("2_rus8k")]
+z_index = 1
+position = Vector2(36, 201)
+scale = Vector2(0.205, 0.205)
