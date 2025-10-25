@@ -999,6 +999,7 @@ animations = [{
 size = Vector2(15, 28)
 
 [node name="Player" type="CharacterBody2D"]
+z_index = 1
 script = ExtResource("1_ur7pv")
 WALK_SPEED = 67
 RUN_SPEED = 160
@@ -1011,6 +1012,7 @@ frame = 4
 frame_progress = 1.0
 
 [node name="Collision" type="CollisionShape2D" parent="."]
+visible = false
 shape = SubResource("RectangleShape2D_d2wvv")
 
 [node name="Camera2D" type="Camera2D" parent="."]

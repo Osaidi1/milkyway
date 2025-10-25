@@ -7,6 +7,7 @@ extends CharacterBody2D
 
 @export var WALK_SPEED: int = 55
 @export var RUN_SPEED: int = 145
+@export var DASH_SPEED: int = 500
 @export var JUMP_VELOCITY: int = -400
 @export var HEALTH: int = 100
 
@@ -15,6 +16,7 @@ var direction: float
 var is_jumping: bool
 var is_falling: bool
 var is_attacking: bool
+var is_dashing: bool
 var is_dying: bool
 var is_hurting: bool
 var fall_start_played: bool
@@ -25,12 +27,12 @@ func _ready():
 	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
 
 func _unhandled_input(event: InputEvent) -> void:
-	if event.is_action_pressed("temp"):
-		health_change(-30)
-	if event.is_action_pressed("jump") and !is_attacking:
+	if Input.is_action_just_pressed("dash") and !is_attacking and !is_dying and !is_hurting:
+		dash()
+	if event.is_action_pressed("jump") and !is_attacking and !is_dying and !is_hurting:
 		if is_on_floor() or !coyote.is_stopped():
 			jump()
-	if event.is_action_released("attack") and !is_jumping and !is_falling:
+	if event.is_action_released("attack") and !is_jumping and !is_falling and !is_dying and !is_hurting:
 		attack()
 
 func _physics_process(delta: float) -> void:
@@ -56,7 +58,8 @@ func _physics_process(delta: float) -> void:
 	# Get the input direction and handle the movement/deceleration.
 	direction = Input.get_axis("left", "right")
 	if direction:
-		velocity.x = direction * speed
+		if !is_dashing:
+			velocity.x = direction * speed
 	else:
 		velocity.x = move_toward(velocity.x, 0, speed)
 	
@@ -74,6 +77,8 @@ func _physics_process(delta: float) -> void:
 	#Coyote Time
 	if was_on_floor and !is_on_floor():
 		coyote.start()
+	if is_on_floor() and !coyote.is_stopped():
+		coyote.stop()
 
 func speed_set():
 	if Input.is_action_pressed("run"):
@@ -86,12 +91,12 @@ func face_direction():
 		animater.flip_h = true
 	elif direction > 0:
 		animater.flip_h = false
-	elif direction == 0:
-		pass
 
 func anims():
 	if is_dying or is_hurting: return
-	if is_jumping or velocity.y < 0:
+	if is_dashing:
+		animater.play("dash")
+	elif is_jumping or velocity.y < 0:
 		animater.play("jump")
 	elif is_falling:
 		if !fall_start_played:
@@ -131,6 +136,12 @@ func die():
 	animater.play("death")
 	await get_tree().create_timer(2.5).timeout
 	get_tree().reload_current_scene()
+
+func dash():
+	is_dashing = true
+	velocity.x = DASH_SPEED * direction
+	await get_tree().create_timer(0.2).timeout
+	is_dashing = false
 
 func in_void(body: Node2D) -> void:
 	if body is Player:

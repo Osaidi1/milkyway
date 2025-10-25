@@ -12,15 +12,14 @@ size = Vector2(637, 140)
 position = Vector2(-276, -85)
 
 [node name="Ground" parent="." instance=ExtResource("2_rus8k")]
-z_index = 1
 position = Vector2(0, 1.52588e-05)
 scale = Vector2(0.455, 0.455)
 
-[node name="Area2D" type="Area2D" parent="."]
+[node name="danger" type="Area2D" parent="."]
 position = Vector2(-146, 234)
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="danger"]
 position = Vector2(-308.5, 60)
 shape = SubResource("RectangleShape2D_emvin")
 
-[connection signal="body_entered" from="Area2D" to="Player" method="in_void"]
+[connection signal="body_entered" from="danger" to="Player" method="in_void"]
