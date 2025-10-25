@@ -4,7 +4,7 @@
 [ext_resource type="PackedScene" uid="uid://br5apb2urv30b" path="res://scenes/ground.tscn" id="2_rus8k"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_emvin"]
-size = Vector2(637, 140)
+size = Vector2(1867, 140)
 
 [node name="Level1" type="Node2D"]
 
@@ -19,7 +19,7 @@ scale = Vector2(0.455, 0.455)
 position = Vector2(-146, 234)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="danger"]
-position = Vector2(-308.5, 60)
+position = Vector2(306.5, 60)
 shape = SubResource("RectangleShape2D_emvin")
 
 [connection signal="body_entered" from="danger" to="Player" method="in_void"]

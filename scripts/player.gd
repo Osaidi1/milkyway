@@ -21,6 +21,9 @@ var is_dying: bool
 var is_hurting: bool
 var fall_start_played: bool
 var was_on_floor: bool
+var dash_time: float
+var dash_duration: float = 0.35
+var looking_toward: int
 
 func _ready():
 	is_dying = false
@@ -63,6 +66,23 @@ func _physics_process(delta: float) -> void:
 	else:
 		velocity.x = move_toward(velocity.x, 0, speed)
 	
+	#Dash Logic
+	if is_dashing:
+		dash_time += delta
+		if dash_time <= dash_duration:
+			var half_duration = dash_duration * 0.5
+			if dash_time < half_duration:
+				velocity.x = DASH_SPEED * looking_toward
+			else:
+				var t = (dash_time - half_duration) / half_duration
+				var slowed_speed = lerp(DASH_SPEED, speed, t)
+				velocity.x = slowed_speed * looking_toward
+		else:
+			var target_speed = max(speed, DASH_SPEED * 0.5) * looking_toward
+			velocity.x = move_toward(velocity.x, target_speed, 3000 * delta)
+		if dash_time >= dash_duration:
+			is_dashing = false
+	
 	#Call Funcs
 	face_direction()
 	
@@ -89,8 +109,10 @@ func speed_set():
 func face_direction():
 	if direction < 0:
 		animater.flip_h = true
+		looking_toward = -1
 	elif direction > 0:
 		animater.flip_h = false
+		looking_toward = 1
 
 func anims():
 	if is_dying or is_hurting: return
@@ -139,9 +161,7 @@ func die():
 
 func dash():
 	is_dashing = true
-	velocity.x = DASH_SPEED * direction
-	await get_tree().create_timer(0.2).timeout
-	is_dashing = false
+	dash_time = 0.0
 
 func in_void(body: Node2D) -> void:
 	if body is Player:
