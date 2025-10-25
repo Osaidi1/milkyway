@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://l7e7gigopgnh"
-path="res://.godot/imported/male_hero_template-fall_loop.png-9d48a47b32da962f2b1eb607fca62688.ctex"
+uid="uid://ddh0d3f3jfrvv"
+path="res://.godot/imported/male_hero-walk_turn.png-32f313cee7a1d817f545d66dd794b0aa.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/player/male_hero_template-fall_loop.png"
-dest_files=["res://.godot/imported/male_hero_template-fall_loop.png-9d48a47b32da962f2b1eb607fca62688.ctex"]
+source_file="res://assets/player/male_hero-walk_turn.png"
+dest_files=["res://.godot/imported/male_hero-walk_turn.png-32f313cee7a1d817f545d66dd794b0aa.ctex"]
 
 [params]
 

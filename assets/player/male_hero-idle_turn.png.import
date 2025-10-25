@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://da4ghamdj7w3u"
-path="res://.godot/imported/male_hero_template-run.png-c9b723a0ed287506c0e7fb19cbbb1d59.ctex"
+uid="uid://c1oydq7iyca17"
+path="res://.godot/imported/male_hero-idle_turn.png-022b99dde62fa80d8c9930fc9c310218.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/player/male_hero_template-run.png"
-dest_files=["res://.godot/imported/male_hero_template-run.png-c9b723a0ed287506c0e7fb19cbbb1d59.ctex"]
+source_file="res://assets/player/male_hero-idle_turn.png"
+dest_files=["res://.godot/imported/male_hero-idle_turn.png-022b99dde62fa80d8c9930fc9c310218.ctex"]
 
 [params]
 
