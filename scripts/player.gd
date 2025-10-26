@@ -6,14 +6,16 @@ extends CharacterBody2D
 @onready var coyote: Timer = $coyote
 @onready var side: RayCast2D = $Animater/side
 @onready var side2: RayCast2D = $Animater/side2
+@onready var side3: RayCast2D = $Animater/side3
+@onready var hang_stop: CollisionShape2D = $"Hang Stop"
 
 @export var WALK_SPEED: int = 55
 @export var RUN_SPEED: int = 145
 @export var DASH_SPEED: int = 500
 @export var JUMP_VELOCITY: int = -400
 @export var HEALTH: int = 100
-@export var SLIDE_FRICTION: int = 35
-@export var WALL_JUMP_POWER: int = 500
+@export var SLIDE_FRICTION: int = 40
+@export var WALL_JUMP_POWER: int = 100
 
 var speed: int
 var direction: float
@@ -25,12 +27,14 @@ var is_dying: bool
 var is_hurting: bool
 var is_in_wall: bool
 var is_wall_jumping: bool
+var is_hanging: bool
 var fall_start_played: bool
 var was_on_floor: bool
 var dash_time: float
 var dash_duration: float = 0.35
 var looking_toward: int
 var wall_jump_lock: float = 0.0
+var wall_jump_lock_time: float = 0.2
 var wall_stay: float = 0.0
 var wall_stay_time: float = 0.05
 
@@ -73,11 +77,15 @@ func _physics_process(delta: float) -> void:
 		
 	# Get the input direction and handle the movement/deceleration.
 	direction = Input.get_axis("left", "right")
-	if direction:
-		if !is_dashing or !is_wall_jumping:
-			velocity.x = direction * speed
-	else:
-		velocity.x = move_toward(velocity.x, 0, speed)
+	if wall_jump_lock > 0:
+		wall_jump_lock -= delta
+		velocity.x = move_toward(velocity.x, velocity.x, 0.2)
+	elif wall_jump_lock <= 0:
+		if direction:
+			if !is_dashing or !is_wall_jumping:
+				velocity.x = direction * speed
+		else:
+			velocity.x = move_toward(velocity.x, 0, speed)
 	
 	#Dash Logic
 	if is_dashing:
@@ -91,7 +99,7 @@ func _physics_process(delta: float) -> void:
 				var slowed_speed = lerp(DASH_SPEED, speed, t)
 				velocity.x = slowed_speed * looking_toward
 		else:
-			var target_speed = max(speed + 10, DASH_SPEED * 0.5) * looking_toward
+			var target_speed = max(speed + 20, DASH_SPEED * 0.5) * looking_toward
 			velocity.x = move_toward(velocity.x, target_speed, 3000 * delta)
 		if dash_time >= dash_duration:
 			is_dashing = false
@@ -123,16 +131,18 @@ func speed_set():
 
 func face_direction():
 	if is_in_wall: return
-	if direction < 0:
+	if direction < 0 or (is_in_wall and (Input.is_action_just_pressed("jump") or is_on_floor())):
 		animater.flip_h = true
 		looking_toward = -1
 		side.target_position = Vector2(-6.5, 0)
 		side2.target_position = Vector2(-6.5, 0)
-	elif direction > 0:
+		side3.target_position = Vector2(-14, 0)
+	elif direction > 0 or (is_in_wall and (Input.is_action_just_pressed("jump") or is_on_floor())):
 		animater.flip_h = false
 		looking_toward = 1
 		side.target_position = Vector2(6.5, 0)
 		side2.target_position = Vector2(6.5, 0)
+		side3.target_position = Vector2(14, 0)
 
 func anims():
 	if is_dying or is_hurting: return
@@ -162,19 +172,13 @@ func attack():
 	pass
 
 func jump():
-		is_jumping = true
-		velocity.y = JUMP_VELOCITY
-		if is_in_wall:
-			is_wall_jumping = true
-			is_in_wall = false
-			var dir
-			if animater.flip_h:
-				dir = -1
-			elif !animater.flip_h:
-				dir = 1
-			velocity.x = WALL_JUMP_POWER * dir
-			await get_tree().create_timer(0.3).timeout
-			is_wall_jumping = false
+	is_jumping = true
+	velocity.y = JUMP_VELOCITY
+	if is_in_wall:
+		velocity.x = WALL_JUMP_POWER * -looking_toward
+		is_wall_jumping = true
+		is_in_wall = false
+		wall_jump_lock = wall_jump_lock_time
 
 func health_set():
 	HEALTH = clamp(HEALTH, 0, 100)

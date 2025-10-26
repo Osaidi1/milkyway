@@ -1,4 +1,4 @@
-[gd_scene load_steps=150 format=3 uid="uid://3ffbqokcdysi"]
+[gd_scene load_steps=143 format=3 uid="uid://3ffbqokcdysi"]
 
 [ext_resource type="Script" uid="uid://c1yn0ljd2aaa1" path="res://scripts/player.gd" id="1_ur7pv"]
 [ext_resource type="Texture2D" uid="uid://b1icsdjy1kxp5" path="res://assets/player/male_hero-combo_1.png" id="2_4ni07"]
@@ -14,11 +14,10 @@
 [ext_resource type="Texture2D" uid="uid://l1ulf0ihlgch" path="res://assets/player/male_hero-hurt.png" id="12_487ah"]
 [ext_resource type="Texture2D" uid="uid://dqpoaiyufijex" path="res://assets/player/male_hero-idle.png" id="13_md1ol"]
 [ext_resource type="Texture2D" uid="uid://c0a74wp6y807n" path="res://assets/player/male_hero-jump.png" id="15_jc3p3"]
-[ext_resource type="Texture2D" uid="uid://cossfdllfgews" path="res://assets/player/male_hero-ledge_hang.png" id="16_hax0n"]
 [ext_resource type="Texture2D" uid="uid://67p0nyqr2a45" path="res://assets/player/male_hero-run.png" id="17_t4otl"]
 [ext_resource type="Texture2D" uid="uid://cfjl0o0hkkjga" path="res://assets/player/male_hero-walk.png" id="20_2dvfe"]
 [ext_resource type="Texture2D" uid="uid://cpmdw4e8qejuc" path="res://assets/player/male_hero-wall_jump.png" id="22_fdfoy"]
-[ext_resource type="Texture2D" uid="uid://cjoxjqegvgd" path="res://assets/player/male_hero-wall_slide.png" id="23_hhpqf"]
+[ext_resource type="Texture2D" uid="uid://c8hm1l86oribv" path="res://assets/player/male_hero-wall_slide.png" id="23_hhpqf"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_g5jhy"]
 atlas = ExtResource("2_4ni07")
@@ -391,34 +390,6 @@ region = Rect2(512, 0, 128, 128)
 [sub_resource type="AtlasTexture" id="AtlasTexture_0usgs"]
 atlas = ExtResource("15_jc3p3")
 region = Rect2(640, 0, 128, 128)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_c7iw1"]
-atlas = ExtResource("16_hax0n")
-region = Rect2(0, 0, 128, 128)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_fccsy"]
-atlas = ExtResource("16_hax0n")
-region = Rect2(128, 0, 128, 128)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_e4c5e"]
-atlas = ExtResource("16_hax0n")
-region = Rect2(256, 0, 128, 128)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_72noi"]
-atlas = ExtResource("16_hax0n")
-region = Rect2(384, 0, 128, 128)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_0j382"]
-atlas = ExtResource("16_hax0n")
-region = Rect2(512, 0, 128, 128)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_b3jfe"]
-atlas = ExtResource("16_hax0n")
-region = Rect2(640, 0, 128, 128)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_gvigm"]
-atlas = ExtResource("16_hax0n")
-region = Rect2(768, 0, 128, 128)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_5ej1x"]
 atlas = ExtResource("17_t4otl")
@@ -880,32 +851,6 @@ animations = [{
 }, {
 "frames": [{
 "duration": 1.0,
-"texture": SubResource("AtlasTexture_c7iw1")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_fccsy")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_e4c5e")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_72noi")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_0j382")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_b3jfe")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_gvigm")
-}],
-"loop": false,
-"name": &"ledge hang",
-"speed": 8.0
-}, {
-"frames": [{
-"duration": 1.0,
 "texture": SubResource("AtlasTexture_5ej1x")
 }, {
 "duration": 1.0,
@@ -1012,6 +957,9 @@ animations = [{
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_d2wvv"]
 size = Vector2(12, 28)
 
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_4r5pv"]
+size = Vector2(4, 2)
+
 [node name="Player" type="CharacterBody2D"]
 z_index = 1
 script = ExtResource("1_ur7pv")
@@ -1020,9 +968,8 @@ RUN_SPEED = 160
 
 [node name="Animater" type="AnimatedSprite2D" parent="."]
 sprite_frames = SubResource("SpriteFrames_y4r1p")
-animation = &"wall slide"
+animation = &"attack 1"
 autoplay = "idle"
-flip_h = true
 
 [node name="side" type="RayCast2D" parent="Animater"]
 position = Vector2(0, -13)
@@ -1034,6 +981,11 @@ target_position = Vector2(6, 0)
 
 [node name="Collision" type="CollisionShape2D" parent="."]
 shape = SubResource("RectangleShape2D_d2wvv")
+
+[node name="Hang Stop" type="CollisionShape2D" parent="."]
+position = Vector2(13, -16)
+shape = SubResource("RectangleShape2D_4r5pv")
+disabled = true
 
 [node name="Camera2D" type="Camera2D" parent="."]
 offset = Vector2(0, -58.07)
