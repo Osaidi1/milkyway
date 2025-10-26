@@ -18,7 +18,7 @@
 [ext_resource type="Texture2D" uid="uid://67p0nyqr2a45" path="res://assets/player/male_hero-run.png" id="17_t4otl"]
 [ext_resource type="Texture2D" uid="uid://cfjl0o0hkkjga" path="res://assets/player/male_hero-walk.png" id="20_2dvfe"]
 [ext_resource type="Texture2D" uid="uid://cpmdw4e8qejuc" path="res://assets/player/male_hero-wall_jump.png" id="22_fdfoy"]
-[ext_resource type="Texture2D" uid="uid://btwnmdo4av6rs" path="res://assets/player/male_hero-wall_slide.png" id="23_hhpqf"]
+[ext_resource type="Texture2D" uid="uid://cjoxjqegvgd" path="res://assets/player/male_hero-wall_slide.png" id="23_hhpqf"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_g5jhy"]
 atlas = ExtResource("2_4ni07")
@@ -500,35 +500,35 @@ region = Rect2(1024, 0, 128, 128)
 atlas = ExtResource("20_2dvfe")
 region = Rect2(1152, 0, 128, 128)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_ep0wi"]
+[sub_resource type="AtlasTexture" id="AtlasTexture_i4ail"]
 atlas = ExtResource("22_fdfoy")
 region = Rect2(0, 0, 128, 128)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_tpmi1"]
+[sub_resource type="AtlasTexture" id="AtlasTexture_a38lo"]
 atlas = ExtResource("22_fdfoy")
 region = Rect2(128, 0, 128, 128)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_7ehci"]
+[sub_resource type="AtlasTexture" id="AtlasTexture_4ni07"]
 atlas = ExtResource("22_fdfoy")
 region = Rect2(256, 0, 128, 128)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_j7i68"]
+[sub_resource type="AtlasTexture" id="AtlasTexture_l71n6"]
 atlas = ExtResource("22_fdfoy")
 region = Rect2(384, 0, 128, 128)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_6nj3f"]
+[sub_resource type="AtlasTexture" id="AtlasTexture_ke2ow"]
 atlas = ExtResource("23_hhpqf")
 region = Rect2(0, 0, 128, 128)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_k8oxv"]
+[sub_resource type="AtlasTexture" id="AtlasTexture_ujl30"]
 atlas = ExtResource("23_hhpqf")
 region = Rect2(128, 0, 128, 128)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_4cgac"]
+[sub_resource type="AtlasTexture" id="AtlasTexture_31cv2"]
 atlas = ExtResource("23_hhpqf")
 region = Rect2(256, 0, 128, 128)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_r7b2j"]
+[sub_resource type="AtlasTexture" id="AtlasTexture_pf23h"]
 atlas = ExtResource("23_hhpqf")
 region = Rect2(384, 0, 128, 128)
 
@@ -976,16 +976,16 @@ animations = [{
 }, {
 "frames": [{
 "duration": 1.0,
-"texture": SubResource("AtlasTexture_ep0wi")
+"texture": SubResource("AtlasTexture_i4ail")
 }, {
 "duration": 1.0,
-"texture": SubResource("AtlasTexture_tpmi1")
+"texture": SubResource("AtlasTexture_a38lo")
 }, {
 "duration": 1.0,
-"texture": SubResource("AtlasTexture_7ehci")
+"texture": SubResource("AtlasTexture_4ni07")
 }, {
 "duration": 1.0,
-"texture": SubResource("AtlasTexture_j7i68")
+"texture": SubResource("AtlasTexture_l71n6")
 }],
 "loop": false,
 "name": &"wall jump",
@@ -993,16 +993,16 @@ animations = [{
 }, {
 "frames": [{
 "duration": 1.0,
-"texture": SubResource("AtlasTexture_6nj3f")
+"texture": SubResource("AtlasTexture_ke2ow")
 }, {
 "duration": 1.0,
-"texture": SubResource("AtlasTexture_k8oxv")
+"texture": SubResource("AtlasTexture_ujl30")
 }, {
 "duration": 1.0,
-"texture": SubResource("AtlasTexture_4cgac")
+"texture": SubResource("AtlasTexture_31cv2")
 }, {
 "duration": 1.0,
-"texture": SubResource("AtlasTexture_r7b2j")
+"texture": SubResource("AtlasTexture_pf23h")
 }],
 "loop": true,
 "name": &"wall slide",
@@ -1010,7 +1010,7 @@ animations = [{
 }]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_d2wvv"]
-size = Vector2(15, 28)
+size = Vector2(12, 28)
 
 [node name="Player" type="CharacterBody2D"]
 z_index = 1
@@ -1022,10 +1022,17 @@ RUN_SPEED = 160
 sprite_frames = SubResource("SpriteFrames_y4r1p")
 animation = &"wall slide"
 autoplay = "idle"
-frame_progress = 0.549128
+flip_h = true
+
+[node name="side" type="RayCast2D" parent="Animater"]
+position = Vector2(0, -13)
+target_position = Vector2(6, 0)
+
+[node name="side2" type="RayCast2D" parent="Animater"]
+position = Vector2(0, 3)
+target_position = Vector2(6, 0)
 
 [node name="Collision" type="CollisionShape2D" parent="."]
-visible = false
 shape = SubResource("RectangleShape2D_d2wvv")
 
 [node name="Camera2D" type="Camera2D" parent="."]

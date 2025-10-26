@@ -4,12 +4,16 @@ extends CharacterBody2D
 @onready var animater: AnimatedSprite2D = $Animater
 @onready var collision: CollisionShape2D = $Collision
 @onready var coyote: Timer = $coyote
+@onready var side: RayCast2D = $Animater/side
+@onready var side2: RayCast2D = $Animater/side2
 
 @export var WALK_SPEED: int = 55
 @export var RUN_SPEED: int = 145
 @export var DASH_SPEED: int = 500
 @export var JUMP_VELOCITY: int = -400
 @export var HEALTH: int = 100
+@export var SLIDE_FRICTION: int = 35
+@export var WALL_JUMP_POWER: int = 500
 
 var speed: int
 var direction: float
@@ -19,23 +23,28 @@ var is_attacking: bool
 var is_dashing: bool
 var is_dying: bool
 var is_hurting: bool
+var is_in_wall: bool
+var is_wall_jumping: bool
 var fall_start_played: bool
 var was_on_floor: bool
 var dash_time: float
 var dash_duration: float = 0.35
 var looking_toward: int
+var wall_jump_lock: float = 0.0
+var wall_stay: float = 0.0
+var wall_stay_time: float = 0.05
 
 func _ready():
 	is_dying = false
 	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
 
 func _unhandled_input(event: InputEvent) -> void:
-	if Input.is_action_just_pressed("dash") and !is_attacking and !is_dying and !is_hurting:
+	if Input.is_action_just_pressed("dash") and !is_attacking and !is_dying and !is_hurting and !is_in_wall:
 		dash()
 	if event.is_action_pressed("jump") and !is_attacking and !is_dying and !is_hurting:
-		if is_on_floor() or !coyote.is_stopped():
+		if is_on_floor() or !coyote.is_stopped() or is_in_wall:
 			jump()
-	if event.is_action_released("attack") and !is_jumping and !is_falling and !is_dying and !is_hurting:
+	if event.is_action_released("attack") and !is_jumping and !is_falling and !is_dying and !is_hurting and !is_in_wall:
 		attack()
 
 func _physics_process(delta: float) -> void:
@@ -50,9 +59,13 @@ func _physics_process(delta: float) -> void:
 		die()
 	if is_falling:
 		is_jumping = false
+	if is_on_wall():
+		is_wall_jumping = false
+		is_dashing = false
 	if is_on_floor():
 		fall_start_played = false
 		is_falling = false
+		is_wall_jumping = false
 	
 	#Falling
 	if !Input.is_action_just_pressed("jump") and velocity.y > 0:
@@ -61,7 +74,7 @@ func _physics_process(delta: float) -> void:
 	# Get the input direction and handle the movement/deceleration.
 	direction = Input.get_axis("left", "right")
 	if direction:
-		if !is_dashing:
+		if !is_dashing or !is_wall_jumping:
 			velocity.x = direction * speed
 	else:
 		velocity.x = move_toward(velocity.x, 0, speed)
@@ -78,13 +91,15 @@ func _physics_process(delta: float) -> void:
 				var slowed_speed = lerp(DASH_SPEED, speed, t)
 				velocity.x = slowed_speed * looking_toward
 		else:
-			var target_speed = max(speed, DASH_SPEED * 0.5) * looking_toward
+			var target_speed = max(speed + 10, DASH_SPEED * 0.5) * looking_toward
 			velocity.x = move_toward(velocity.x, target_speed, 3000 * delta)
 		if dash_time >= dash_duration:
 			is_dashing = false
 	
 	#Call Funcs
 	face_direction()
+	
+	wall_logic()
 	
 	health_set()
 	
@@ -95,7 +110,7 @@ func _physics_process(delta: float) -> void:
 	move_and_slide()
 	
 	#Coyote Time
-	if was_on_floor and !is_on_floor():
+	if (was_on_floor and !is_on_floor()) or (is_in_wall and Input.is_action_just_pressed("jump")):
 		coyote.start()
 	if is_on_floor() and !coyote.is_stopped():
 		coyote.stop()
@@ -107,17 +122,26 @@ func speed_set():
 		speed = WALK_SPEED
 
 func face_direction():
+	if is_in_wall: return
 	if direction < 0:
 		animater.flip_h = true
 		looking_toward = -1
+		side.target_position = Vector2(-6.5, 0)
+		side2.target_position = Vector2(-6.5, 0)
 	elif direction > 0:
 		animater.flip_h = false
 		looking_toward = 1
+		side.target_position = Vector2(6.5, 0)
+		side2.target_position = Vector2(6.5, 0)
 
 func anims():
 	if is_dying or is_hurting: return
 	if is_dashing:
 		animater.play("dash")
+	elif is_in_wall:
+		animater.play("wall slide")
+	elif is_wall_jumping:
+		animater.play("wall jump")
 	elif is_jumping or velocity.y < 0:
 		animater.play("jump")
 	elif is_falling:
@@ -138,8 +162,19 @@ func attack():
 	pass
 
 func jump():
-	is_jumping = true
-	velocity.y = JUMP_VELOCITY
+		is_jumping = true
+		velocity.y = JUMP_VELOCITY
+		if is_in_wall:
+			is_wall_jumping = true
+			is_in_wall = false
+			var dir
+			if animater.flip_h:
+				dir = -1
+			elif !animater.flip_h:
+				dir = 1
+			velocity.x = WALL_JUMP_POWER * dir
+			await get_tree().create_timer(0.3).timeout
+			is_wall_jumping = false
 
 func health_set():
 	HEALTH = clamp(HEALTH, 0, 100)
@@ -167,3 +202,15 @@ func in_void(body: Node2D) -> void:
 	if body is Player:
 		await get_tree().create_timer(1).timeout
 		get_tree().reload_current_scene()
+
+func wall_logic():
+	if side.is_colliding() and side2.is_colliding() and !is_on_floor() and velocity.y > 0:
+		velocity.x = 0
+		is_in_wall = true
+		wall_stay = wall_stay_time
+		if Input.is_action_pressed("down"):
+			velocity.y = SLIDE_FRICTION * 3
+		else:
+			velocity.y = SLIDE_FRICTION
+	else:
+		is_in_wall = false

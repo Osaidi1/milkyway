@@ -9,11 +9,9 @@ size = Vector2(1867, 140)
 [node name="Level1" type="Node2D"]
 
 [node name="Player" parent="." instance=ExtResource("1_bswci")]
-position = Vector2(-276, -85)
+position = Vector2(-181, -87)
 
 [node name="Ground" parent="." instance=ExtResource("2_rus8k")]
-position = Vector2(0, 1.52588e-05)
-scale = Vector2(0.455, 0.455)
 
 [node name="danger" type="Area2D" parent="."]
 position = Vector2(-146, 234)
