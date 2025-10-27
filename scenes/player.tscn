@@ -517,7 +517,7 @@ animations = [{
 }],
 "loop": false,
 "name": &"attack 1",
-"speed": 8.0
+"speed": 11.0
 }, {
 "frames": [{
 "duration": 1.0,
@@ -534,7 +534,7 @@ animations = [{
 }],
 "loop": false,
 "name": &"attack 1 recover",
-"speed": 6.0
+"speed": 9.0
 }, {
 "frames": [{
 "duration": 1.0,
@@ -557,7 +557,7 @@ animations = [{
 }],
 "loop": false,
 "name": &"attack 2",
-"speed": 10.0
+"speed": 12.0
 }, {
 "frames": [{
 "duration": 1.0,
@@ -574,7 +574,7 @@ animations = [{
 }],
 "loop": false,
 "name": &"attack 2 recover",
-"speed": 7.0
+"speed": 9.0
 }, {
 "frames": [{
 "duration": 1.0,
@@ -615,7 +615,7 @@ animations = [{
 }],
 "loop": false,
 "name": &"attack 3",
-"speed": 9.0
+"speed": 11.0
 }, {
 "frames": [{
 "duration": 1.0,
@@ -638,7 +638,7 @@ animations = [{
 }],
 "loop": false,
 "name": &"attack 3 recover",
-"speed": 8.0
+"speed": 12.0
 }, {
 "frames": [{
 "duration": 1.0,
@@ -969,14 +969,17 @@ animation = &"attack 3 recover"
 autoplay = "idle"
 
 [node name="side" type="RayCast2D" parent="Animater"]
+visible = false
 position = Vector2(0, -13)
 target_position = Vector2(6, 0)
 
 [node name="side2" type="RayCast2D" parent="Animater"]
+visible = false
 position = Vector2(0, 3)
 target_position = Vector2(6, 0)
 
 [node name="Collision" type="CollisionShape2D" parent="."]
+visible = false
 shape = SubResource("RectangleShape2D_d2wvv")
 
 [node name="Camera2D" type="Camera2D" parent="."]
@@ -987,13 +990,17 @@ position_smoothing_enabled = true
 position_smoothing_speed = 3.0
 
 [node name="coyote" type="Timer" parent="."]
-wait_time = 0.15
+wait_time = 0.1
 one_shot = true
 
 [node name="cooldown" type="Timer" parent="."]
-wait_time = 0.15
+wait_time = 0.05
 
 [node name="combo" type="Timer" parent="."]
+
+[node name="jump buffer" type="Timer" parent="."]
+wait_time = 0.08
+one_shot = true
 
 [connection signal="timeout" from="cooldown" to="." method="cooldown_end"]
 [connection signal="timeout" from="combo" to="." method="combo_end"]

@@ -6,9 +6,9 @@ extends CharacterBody2D
 @onready var coyote: Timer = $coyote
 @onready var side: RayCast2D = $Animater/side
 @onready var side2: RayCast2D = $Animater/side2
-@onready var hang_stop: CollisionShape2D = $"Hang Stop"
 @onready var combo_timer: Timer = $combo
 @onready var cooldown: Timer = $cooldown
+@onready var jump_buffer: Timer = $"jump buffer"
 
 @export var WALK_SPEED: int = 55
 @export var RUN_SPEED: int = 145
@@ -16,7 +16,7 @@ extends CharacterBody2D
 @export var JUMP_VELOCITY: int = -400
 @export var HEALTH: int = 100
 @export var SLIDE_FRICTION: int = 40
-@export var WALL_JUMP_POWER: int = 100
+@export var WALL_JUMP_POWER: int = 140
 
 enum attack_state {Att1, Att2, Att3}
 
@@ -48,11 +48,16 @@ func _ready():
 	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
 
 func _unhandled_input(event: InputEvent) -> void:
-	if Input.is_action_just_pressed("dash") and !is_attacking and !is_dying and !is_hurting and !is_in_wall:
+	#Dash
+	if Input.is_action_just_pressed("dash") and !is_attacking and !is_dying and !is_hurting and !is_in_wall and !is_dashing:
 		dash()
-	if event.is_action_pressed("jump") and !is_attacking and !is_dying and !is_hurting:
-		if is_on_floor() or !coyote.is_stopped() or is_in_wall:
+	
+	#Jump
+	if is_on_floor() or !coyote.is_stopped() or is_in_wall:
+		if event.is_action_pressed("jump") and !is_attacking and !is_dying and !is_hurting and !is_jumping:
 			jump()
+	
+	#Attack
 	if event.is_action_released("attack") and !is_jumping and !is_falling and !is_dying and !is_hurting and !is_in_wall and can_attack:
 		attack()
 
@@ -79,7 +84,20 @@ func _physics_process(delta: float) -> void:
 	#Falling
 	if !Input.is_action_just_pressed("jump") and velocity.y > 0:
 		is_falling = true
-		
+		velocity.y *= 1.02
+		velocity.normalized()
+	
+	#Jump Buffer
+	if Input.is_action_pressed("jump"):
+		jump_buffer.start()
+	if is_on_floor() and !jump_buffer.is_stopped():
+		velocity.y = JUMP_VELOCITY 
+	
+	#Variable Jump Height
+	if !is_on_floor():
+		if Input.is_action_just_released("jump") or is_on_ceiling():
+			velocity *= 0.7
+	
 	# Get the input direction and handle the movement/deceleration.
 	direction = Input.get_axis("left", "right")
 	if wall_jump_lock > 0:
@@ -91,6 +109,10 @@ func _physics_process(delta: float) -> void:
 				velocity.x = direction * speed
 		else:
 			velocity.x = move_toward(velocity.x, 0, speed)
+	
+	#Stop Moving if Attacking
+	if is_attacking:
+		velocity.x = 0
 	
 	#Dash Logic
 	if is_dashing:
@@ -172,12 +194,13 @@ func anims():
 		animater.play("idle")
 
 func attack():
+	if is_attacking: return
 	if att_state == 1:
 		is_attacking = true
 		animater.play("attack 1")
-		await get_tree().create_timer(0.374).timeout
+		await get_tree().create_timer(0.27).timeout
 		animater.play("attack 1 recover")
-		await get_tree().create_timer(0.665).timeout
+		await get_tree().create_timer(0.443).timeout
 		is_attacking = false
 		can_attack = false
 		combo_timer.start()
@@ -186,20 +209,20 @@ func attack():
 	elif att_state == 2:
 		is_attacking = true
 		animater.play("attack 2")
-		await get_tree().create_timer(0.59).timeout
+		await get_tree().create_timer(0.5).timeout
 		animater.play("attack 2 recover")
-		await get_tree().create_timer(0.56).timeout
+		await get_tree().create_timer(0.44).timeout
 		is_attacking = false
 		can_attack = false
 		combo_timer.start()
 		cooldown.start()
 		att_state = 3
-	if att_state == 3:
+	elif att_state == 3:
 		is_attacking = true
 		animater.play("attack 3")
-		await get_tree().create_timer(1.21).timeout
+		await get_tree().create_timer(1).timeout
 		animater.play("attack 3 recover")
-		await get_tree().create_timer(0.74).timeout
+		await get_tree().create_timer(0.5).timeout
 		is_attacking = false
 		can_attack = false
 		combo_timer.start()
