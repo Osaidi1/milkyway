@@ -960,7 +960,7 @@ size = Vector2(12, 28)
 [node name="Player" type="CharacterBody2D"]
 z_index = 1
 script = ExtResource("1_ur7pv")
-WALK_SPEED = 67
+WALK_SPEED = 60
 RUN_SPEED = 160
 
 [node name="Animater" type="AnimatedSprite2D" parent="."]
@@ -983,8 +983,9 @@ visible = false
 shape = SubResource("RectangleShape2D_d2wvv")
 
 [node name="Camera2D" type="Camera2D" parent="."]
-offset = Vector2(0, -58.07)
+offset = Vector2(0, -77.45)
 zoom = Vector2(2.5, 2.5)
+limit_left = -520
 limit_bottom = 200
 position_smoothing_enabled = true
 position_smoothing_speed = 3.0

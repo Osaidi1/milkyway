@@ -15,8 +15,8 @@ extends CharacterBody2D
 @export var DASH_SPEED: int = 500
 @export var JUMP_VELOCITY: int = -400
 @export var HEALTH: int = 100
-@export var SLIDE_FRICTION: int = 40
-@export var WALL_JUMP_POWER: int = 140
+@export var SLIDE_FRICTION: int = 60
+@export var WALL_JUMP_POWER: int = 100
 
 enum attack_state {Att1, Att2, Att3}
 
