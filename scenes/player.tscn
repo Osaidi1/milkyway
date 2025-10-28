@@ -965,7 +965,7 @@ RUN_SPEED = 160
 
 [node name="Animater" type="AnimatedSprite2D" parent="."]
 sprite_frames = SubResource("SpriteFrames_y4r1p")
-animation = &"attack 3 recover"
+animation = &"idle"
 autoplay = "idle"
 
 [node name="side" type="RayCast2D" parent="Animater"]
@@ -979,14 +979,12 @@ position = Vector2(0, 3)
 target_position = Vector2(6, 0)
 
 [node name="Collision" type="CollisionShape2D" parent="."]
-visible = false
 shape = SubResource("RectangleShape2D_d2wvv")
 
 [node name="Camera2D" type="Camera2D" parent="."]
-offset = Vector2(0, -77.45)
-zoom = Vector2(2.5, 2.5)
-limit_left = -520
-limit_bottom = 200
+offset = Vector2(0, -104.445)
+zoom = Vector2(3, 3)
+limit_bottom = 300
 position_smoothing_enabled = true
 position_smoothing_speed = 3.0
 

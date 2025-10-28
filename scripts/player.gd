@@ -49,16 +49,16 @@ func _ready():
 
 func _unhandled_input(event: InputEvent) -> void:
 	#Dash
-	if Input.is_action_just_pressed("dash") and !is_attacking and !is_dying and !is_hurting and !is_in_wall and !is_dashing:
+	if Input.is_action_just_pressed("dash") and !is_attacking and !is_dying and !is_hurting and !is_in_wall and !is_dashing and vars.dash_unlocked:
 		dash()
 	
 	#Jump
 	if is_on_floor() or !coyote.is_stopped() or is_in_wall:
-		if event.is_action_pressed("jump") and !is_attacking and !is_dying and !is_hurting and !is_jumping:
+		if event.is_action_pressed("jump") and !is_attacking and !is_dying and !is_hurting and !is_jumping and vars.jump_unlocked:
 			jump()
 	
 	#Attack
-	if event.is_action_released("attack") and !is_jumping and !is_falling and !is_dying and !is_hurting and !is_in_wall and can_attack:
+	if event.is_action_released("attack") and !is_jumping and !is_falling and !is_dying and !is_hurting and !is_in_wall and can_attack and vars.attack_unlocked:
 		attack()
 
 func _physics_process(delta: float) -> void:
@@ -90,7 +90,7 @@ func _physics_process(delta: float) -> void:
 	#Jump Buffer
 	if Input.is_action_pressed("jump"):
 		jump_buffer.start()
-	if is_on_floor() and !jump_buffer.is_stopped():
+	if is_on_floor() and !jump_buffer.is_stopped() and vars.jump_unlocked:
 		velocity.y = JUMP_VELOCITY 
 	
 	#Variable Jump Height
@@ -177,7 +177,7 @@ func anims():
 		animater.play("wall slide")
 	elif is_wall_jumping:
 		animater.play("wall jump")
-	elif is_jumping or velocity.y < 0:
+	elif is_jumping or velocity.y < 0 and vars.jump_unlocked:
 		animater.play("jump")
 	elif is_falling:
 		if !fall_start_played:
@@ -230,6 +230,7 @@ func attack():
 		att_state = 1
 
 func jump():
+	if is_attacking: return
 	is_jumping = true
 	velocity.y = JUMP_VELOCITY
 	if is_in_wall:
@@ -266,7 +267,7 @@ func in_void(body: Node2D) -> void:
 		get_tree().reload_current_scene()
 
 func wall_logic():
-	if side.is_colliding() and side2.is_colliding() and !is_on_floor() and velocity.y > 0:
+	if side.is_colliding() and side2.is_colliding() and !is_on_floor() and velocity.y > 0 and vars.wall_slide_jump_unlocked:
 		velocity.x = 0
 		is_in_wall = true
 		wall_stay = wall_stay_time

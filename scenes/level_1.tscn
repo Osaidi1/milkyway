@@ -1,24 +1,11 @@
-[gd_scene load_steps=4 format=3 uid="uid://kvjcgugvhw8a"]
+[gd_scene load_steps=3 format=3 uid="uid://kvjcgugvhw8a"]
 
 [ext_resource type="PackedScene" uid="uid://3ffbqokcdysi" path="res://scenes/player.tscn" id="1_bswci"]
 [ext_resource type="PackedScene" uid="uid://br5apb2urv30b" path="res://scenes/ground.tscn" id="2_rus8k"]
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_emvin"]
-size = Vector2(1867, 140)
-
 [node name="Level1" type="Node2D"]
 
 [node name="World" parent="." instance=ExtResource("2_rus8k")]
-scale = Vector2(1.21, 1.21)
 
 [node name="Player" parent="." instance=ExtResource("1_bswci")]
 position = Vector2(6, -78)
-
-[node name="danger" type="Area2D" parent="."]
-position = Vector2(-146, 234)
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="danger"]
-position = Vector2(306.5, 60)
-shape = SubResource("RectangleShape2D_emvin")
-
-[connection signal="body_entered" from="danger" to="Player" method="in_void"]
