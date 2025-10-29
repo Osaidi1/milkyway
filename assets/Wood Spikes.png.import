@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://dfsfdlry2tcnq"
-path="res://.godot/imported/Tileset.png-8357b5d8a5c4813438aa7187a7fecf4c.ctex"
+uid="uid://decq4166l4sr"
+path="res://.godot/imported/Wood Spikes.png-0c7d55059b8a2997057584b4db89eb30.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/Tileset.png"
-dest_files=["res://.godot/imported/Tileset.png-8357b5d8a5c4813438aa7187a7fecf4c.ctex"]
+source_file="res://assets/Wood Spikes.png"
+dest_files=["res://.godot/imported/Wood Spikes.png-0c7d55059b8a2997057584b4db89eb30.ctex"]
 
 [params]
 

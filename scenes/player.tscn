@@ -1,4 +1,4 @@
-[gd_scene load_steps=142 format=3 uid="uid://3ffbqokcdysi"]
+[gd_scene load_steps=143 format=3 uid="uid://3ffbqokcdysi"]
 
 [ext_resource type="Script" uid="uid://c1yn0ljd2aaa1" path="res://scripts/player.gd" id="1_ur7pv"]
 [ext_resource type="Texture2D" uid="uid://b1icsdjy1kxp5" path="res://assets/player/male_hero-combo_1.png" id="2_4ni07"]
@@ -15,6 +15,7 @@
 [ext_resource type="Texture2D" uid="uid://dqpoaiyufijex" path="res://assets/player/male_hero-idle.png" id="13_md1ol"]
 [ext_resource type="Texture2D" uid="uid://c0a74wp6y807n" path="res://assets/player/male_hero-jump.png" id="15_jc3p3"]
 [ext_resource type="Texture2D" uid="uid://67p0nyqr2a45" path="res://assets/player/male_hero-run.png" id="17_t4otl"]
+[ext_resource type="AudioStream" uid="uid://cxltxdaftistf" path="res://assets/Sword Sound.mp3" id="19_4r5pv"]
 [ext_resource type="Texture2D" uid="uid://cfjl0o0hkkjga" path="res://assets/player/male_hero-walk.png" id="20_2dvfe"]
 [ext_resource type="Texture2D" uid="uid://cpmdw4e8qejuc" path="res://assets/player/male_hero-wall_jump.png" id="22_fdfoy"]
 [ext_resource type="Texture2D" uid="uid://c8hm1l86oribv" path="res://assets/player/male_hero-wall_slide.png" id="23_hhpqf"]
@@ -960,8 +961,6 @@ size = Vector2(12, 28)
 [node name="Player" type="CharacterBody2D"]
 z_index = 1
 script = ExtResource("1_ur7pv")
-WALK_SPEED = 60
-RUN_SPEED = 160
 
 [node name="Animater" type="AnimatedSprite2D" parent="."]
 sprite_frames = SubResource("SpriteFrames_y4r1p")
@@ -969,12 +968,10 @@ animation = &"idle"
 autoplay = "idle"
 
 [node name="side" type="RayCast2D" parent="Animater"]
-visible = false
 position = Vector2(0, -13)
 target_position = Vector2(6, 0)
 
 [node name="side2" type="RayCast2D" parent="Animater"]
-visible = false
 position = Vector2(0, 3)
 target_position = Vector2(6, 0)
 
@@ -1000,6 +997,11 @@ wait_time = 0.05
 [node name="jump buffer" type="Timer" parent="."]
 wait_time = 0.08
 one_shot = true
+
+[node name="SwordSound" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("19_4r5pv")
+volume_db = 14.856
+attenuation = 0.870551
 
 [connection signal="timeout" from="cooldown" to="." method="cooldown_end"]
 [connection signal="timeout" from="combo" to="." method="combo_end"]

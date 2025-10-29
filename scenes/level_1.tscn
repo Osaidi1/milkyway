@@ -1,11 +1,52 @@
-[gd_scene load_steps=3 format=3 uid="uid://kvjcgugvhw8a"]
+[gd_scene load_steps=8 format=3 uid="uid://kvjcgugvhw8a"]
 
 [ext_resource type="PackedScene" uid="uid://3ffbqokcdysi" path="res://scenes/player.tscn" id="1_bswci"]
 [ext_resource type="PackedScene" uid="uid://br5apb2urv30b" path="res://scenes/ground.tscn" id="2_rus8k"]
+[ext_resource type="PackedScene" uid="uid://c5g0jfg21np50" path="res://scenes/world border.tscn" id="3_rus8k"]
+[ext_resource type="PackedScene" uid="uid://cacby62bbtxxn" path="res://scenes/spikes.tscn" id="4_5xbjy"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_bswci"]
+size = Vector2(5869.5, 140)
+
+[sub_resource type="Animation" id="Animation_bswci"]
+resource_name = "intro"
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_rus8k"]
+_data = {
+&"intro": SubResource("Animation_bswci")
+}
 
 [node name="Level1" type="Node2D"]
 
+[node name="Player" parent="." instance=ExtResource("1_bswci")]
+position = Vector2(-261, 82)
+
 [node name="World" parent="." instance=ExtResource("2_rus8k")]
 
-[node name="Player" parent="." instance=ExtResource("1_bswci")]
-position = Vector2(6, -78)
+[node name="Danger" type="Area2D" parent="."]
+position = Vector2(-146, 234)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Danger"]
+position = Vector2(3687.75, 107)
+shape = SubResource("RectangleShape2D_bswci")
+
+[node name="Spikes" type="Node2D" parent="."]
+position = Vector2(-146, 234)
+
+[node name="Spikes" parent="Spikes" instance=ExtResource("4_5xbjy")]
+z_index = -1
+position = Vector2(636, -114)
+
+[node name="Spikes2" parent="Spikes" instance=ExtResource("4_5xbjy")]
+z_index = -1
+position = Vector2(677, -115)
+
+[node name="Border" parent="." instance=ExtResource("3_rus8k")]
+position = Vector2(-357, 60)
+
+[node name="Cutscenes" type="AnimationPlayer" parent="."]
+libraries = {
+&"": SubResource("AnimationLibrary_rus8k")
+}
+
+[connection signal="body_entered" from="Danger" to="Player" method="_on_danger_body_entered"]

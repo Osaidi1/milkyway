@@ -9,6 +9,8 @@ extends CharacterBody2D
 @onready var combo_timer: Timer = $combo
 @onready var cooldown: Timer = $cooldown
 @onready var jump_buffer: Timer = $"jump buffer"
+@onready var cutscenes: AnimationPlayer = $"../Cutscenes"
+@onready var sword_sound: AudioStreamPlayer2D = $SwordSound
 
 @export var WALK_SPEED: int = 55
 @export var RUN_SPEED: int = 145
@@ -19,6 +21,7 @@ extends CharacterBody2D
 @export var WALL_JUMP_POWER: int = 100
 
 enum attack_state {Att1, Att2, Att3}
+var rng = RandomNumberGenerator.new()
 
 var speed: int
 var direction: float
@@ -46,6 +49,7 @@ var can_attack: bool = true
 func _ready():
 	is_dying = false
 	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
+	position = vars.player_spawn
 
 func _unhandled_input(event: InputEvent) -> void:
 	#Dash
@@ -54,7 +58,7 @@ func _unhandled_input(event: InputEvent) -> void:
 	
 	#Jump
 	if is_on_floor() or !coyote.is_stopped() or is_in_wall:
-		if event.is_action_pressed("jump") and !is_attacking and !is_dying and !is_hurting and !is_jumping and vars.jump_unlocked:
+		if event.is_action_pressed("jump") and !is_attacking and !is_dying and !is_hurting and !is_jumping:
 			jump()
 	
 	#Attack
@@ -90,7 +94,7 @@ func _physics_process(delta: float) -> void:
 	#Jump Buffer
 	if Input.is_action_pressed("jump"):
 		jump_buffer.start()
-	if is_on_floor() and !jump_buffer.is_stopped() and vars.jump_unlocked:
+	if is_on_floor() and !jump_buffer.is_stopped():
 		velocity.y = JUMP_VELOCITY 
 	
 	#Variable Jump Height
@@ -177,7 +181,7 @@ func anims():
 		animater.play("wall slide")
 	elif is_wall_jumping:
 		animater.play("wall jump")
-	elif is_jumping or velocity.y < 0 and vars.jump_unlocked:
+	elif is_jumping or velocity.y < 0:
 		animater.play("jump")
 	elif is_falling:
 		if !fall_start_played:
@@ -197,6 +201,9 @@ func attack():
 	if is_attacking: return
 	if att_state == 1:
 		is_attacking = true
+		await get_tree().create_timer(0.05).timeout
+		sword_sound.pitch_scale = rng.randf_range(0.9, 1.2)
+		sword_sound.play()
 		animater.play("attack 1")
 		await get_tree().create_timer(0.27).timeout
 		animater.play("attack 1 recover")
@@ -209,6 +216,8 @@ func attack():
 	elif att_state == 2:
 		is_attacking = true
 		animater.play("attack 2")
+		sword_sound.pitch_scale = rng.randf_range(0.9, 1.2)
+		sword_sound.play()
 		await get_tree().create_timer(0.5).timeout
 		animater.play("attack 2 recover")
 		await get_tree().create_timer(0.44).timeout
@@ -254,8 +263,8 @@ func health_change(diff):
 func die():
 	is_dying = true
 	animater.play("death")
-	await get_tree().create_timer(2.5).timeout
-	get_tree().reload_current_scene()
+	await get_tree().create_timer(3).timeout
+	reload()
 
 func dash():
 	is_dashing = true
@@ -283,3 +292,12 @@ func combo_end() -> void:
 
 func cooldown_end() -> void:
 	can_attack = true
+
+func _on_danger_body_entered(body: Node2D) -> void:
+	if body is Player:
+		await get_tree().create_timer(1).timeout
+		reload()
+
+func reload():
+	await get_tree().create_timer(3).timeout
+	get_tree().reload_current_scene()
