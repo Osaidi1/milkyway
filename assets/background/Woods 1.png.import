@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://d4cvs50b3q7yt"
-path="res://.godot/imported/Skeleton_01_Idle.png-f327a316887c55d71cc16b500acfff0a.ctex"
+uid="uid://c4syrcwyls1yf"
+path="res://.godot/imported/Woods 1.png-404a4750872f1c84c02e65dfa31a3645.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/skeleton/Skeleton_01_Idle.png"
-dest_files=["res://.godot/imported/Skeleton_01_Idle.png-f327a316887c55d71cc16b500acfff0a.ctex"]
+source_file="res://assets/background/Woods 1.png"
+dest_files=["res://.godot/imported/Woods 1.png-404a4750872f1c84c02e65dfa31a3645.ctex"]
 
 [params]
 

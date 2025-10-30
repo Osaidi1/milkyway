@@ -10,7 +10,7 @@ extends CharacterBody2D
 @onready var cooldown: Timer = $cooldown
 @onready var jump_buffer: Timer = $"jump buffer"
 @onready var cutscenes: AnimationPlayer = $"../Cutscenes"
-@onready var sword_sound: AudioStreamPlayer2D = $SwordSound
+@onready var sword_sound_2: AudioStreamPlayer2D = $SwordSound2
 
 @export var WALK_SPEED: int = 55
 @export var RUN_SPEED: int = 145
@@ -202,30 +202,34 @@ func attack():
 	if att_state == 1:
 		is_attacking = true
 		await get_tree().create_timer(0.05).timeout
-		sword_sound.pitch_scale = rng.randf_range(0.9, 1.2)
-		sword_sound.play()
 		animater.play("attack 1")
 		await get_tree().create_timer(0.27).timeout
 		animater.play("attack 1 recover")
 		await get_tree().create_timer(0.443).timeout
 		is_attacking = false
 		can_attack = false
-		combo_timer.start()
 		cooldown.start()
-		att_state = 2
+		if vars.attack_2_unlocked:
+			combo_timer.start()
+			att_state = 2
+		else:
+			att_state = 1
 	elif att_state == 2:
 		is_attacking = true
 		animater.play("attack 2")
-		sword_sound.pitch_scale = rng.randf_range(0.9, 1.2)
-		sword_sound.play()
+		sword_sound_2.pitch_scale = rng.randf_range(0.9, 1.2)
+		sword_sound_2.play()
 		await get_tree().create_timer(0.5).timeout
 		animater.play("attack 2 recover")
 		await get_tree().create_timer(0.44).timeout
 		is_attacking = false
 		can_attack = false
-		combo_timer.start()
 		cooldown.start()
-		att_state = 3
+		if vars.attack_3_unlocked:
+			combo_timer.start()
+			att_state = 3
+		else:
+			att_state = 1
 	elif att_state == 3:
 		is_attacking = true
 		animater.play("attack 3")

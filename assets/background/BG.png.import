@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://tqr8dekgvgal"
-path="res://.godot/imported/Skeleton_01Walk.png-3812cf7bdd69896b8187d6a2800177c3.ctex"
+uid="uid://d4i5j58hfk4h7"
+path="res://.godot/imported/BG.png-09ce8fac1a6b047c49585ed283f7d3e0.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/skeleton/Skeleton_01Walk.png"
-dest_files=["res://.godot/imported/Skeleton_01Walk.png-3812cf7bdd69896b8187d6a2800177c3.ctex"]
+source_file="res://assets/background/BG.png"
+dest_files=["res://.godot/imported/BG.png-09ce8fac1a6b047c49585ed283f7d3e0.ctex"]
 
 [params]
 

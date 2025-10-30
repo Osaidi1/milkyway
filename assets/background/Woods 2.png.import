@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://ctb6vll31hugi"
-path="res://.godot/imported/Skeleton_Die.png-4c80439c2f7bad6358cf65b2b345e759.ctex"
+uid="uid://cukwg4u6l03lu"
+path="res://.godot/imported/Woods 2.png-9dc2133569854b571542690fe8a4ed94.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/skeleton/Skeleton_Die.png"
-dest_files=["res://.godot/imported/Skeleton_Die.png-4c80439c2f7bad6358cf65b2b345e759.ctex"]
+source_file="res://assets/background/Woods 2.png"
+dest_files=["res://.godot/imported/Woods 2.png-9dc2133569854b571542690fe8a4ed94.ctex"]
 
 [params]
 

@@ -1,8 +1,9 @@
-[gd_scene load_steps=7 format=3 uid="uid://kvjcgugvhw8a"]
+[gd_scene load_steps=8 format=3 uid="uid://kvjcgugvhw8a"]
 
 [ext_resource type="PackedScene" uid="uid://3ffbqokcdysi" path="res://scenes/player.tscn" id="1_bswci"]
 [ext_resource type="PackedScene" uid="uid://br5apb2urv30b" path="res://scenes/ground.tscn" id="2_rus8k"]
 [ext_resource type="PackedScene" uid="uid://c5g0jfg21np50" path="res://scenes/world border.tscn" id="3_rus8k"]
+[ext_resource type="PackedScene" uid="uid://bjcnwi0wp4dnl" path="res://scenes/skeleton.tscn" id="4_5xbjy"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_bswci"]
 size = Vector2(5869.5, 140)
@@ -27,7 +28,7 @@ position = Vector2(3687.75, 107)
 shape = SubResource("RectangleShape2D_bswci")
 
 [node name="Border" parent="." instance=ExtResource("3_rus8k")]
-position = Vector2(-105, -117)
+position = Vector2(-274, -207)
 
 [node name="Cutscenes" type="AnimationPlayer" parent="."]
 libraries = {
@@ -35,4 +36,8 @@ libraries = {
 }
 
 [node name="Player" parent="." instance=ExtResource("1_bswci")]
-position = Vector2(-5, -121)
+position = Vector2(1092, -126)
+
+[node name="Skeleton" parent="." instance=ExtResource("4_5xbjy")]
+position = Vector2(1393, -26)
+scale = Vector2(1.2, 1.2)

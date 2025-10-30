@@ -979,7 +979,7 @@ target_position = Vector2(6, 0)
 shape = SubResource("RectangleShape2D_d2wvv")
 
 [node name="Camera2D" type="Camera2D" parent="."]
-offset = Vector2(0, -104.445)
+offset = Vector2(0, -62.19)
 zoom = Vector2(3, 3)
 limit_bottom = 300
 position_smoothing_enabled = true
@@ -998,7 +998,7 @@ wait_time = 0.05
 wait_time = 0.08
 one_shot = true
 
-[node name="SwordSound" type="AudioStreamPlayer2D" parent="."]
+[node name="SwordSound2" type="AudioStreamPlayer2D" parent="."]
 stream = ExtResource("19_4r5pv")
 volume_db = 14.856
 attenuation = 0.870551
