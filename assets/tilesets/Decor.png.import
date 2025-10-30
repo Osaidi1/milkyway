@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://vwvvayuay6yy"
-path="res://.godot/imported/mountain2.png-63ef3c9448f6fba0c8d8f8cbe3e5059a.ctex"
+uid="uid://cgfk7iw0adpj3"
+path="res://.godot/imported/Decor.png-ad01b0ba270e051df1c8b5df82ae75bd.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/Background/mountain2.png"
-dest_files=["res://.godot/imported/mountain2.png-63ef3c9448f6fba0c8d8f8cbe3e5059a.ctex"]
+source_file="res://assets/tilesets/Decor.png"
+dest_files=["res://.godot/imported/Decor.png-ad01b0ba270e051df1c8b5df82ae75bd.ctex"]
 
 [params]
 

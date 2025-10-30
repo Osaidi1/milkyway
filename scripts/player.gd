@@ -49,7 +49,7 @@ var can_attack: bool = true
 func _ready():
 	is_dying = false
 	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
-	position = vars.player_spawn
+	#position = vars.player_spawn
 
 func _unhandled_input(event: InputEvent) -> void:
 	#Dash

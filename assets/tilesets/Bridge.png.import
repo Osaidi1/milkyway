@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://decq4166l4sr"
-path="res://.godot/imported/Wood Spikes.png-0c7d55059b8a2997057584b4db89eb30.ctex"
+uid="uid://cyjsf4u11mfmv"
+path="res://.godot/imported/Bridge.png-6cc9b6e2055990728fa0aea69d05249d.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/Wood Spikes.png"
-dest_files=["res://.godot/imported/Wood Spikes.png-0c7d55059b8a2997057584b4db89eb30.ctex"]
+source_file="res://assets/tilesets/Bridge.png"
+dest_files=["res://.godot/imported/Bridge.png-6cc9b6e2055990728fa0aea69d05249d.ctex"]
 
 [params]
 
