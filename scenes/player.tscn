@@ -1,4 +1,4 @@
-[gd_scene load_steps=143 format=3 uid="uid://3ffbqokcdysi"]
+[gd_scene load_steps=147 format=3 uid="uid://3ffbqokcdysi"]
 
 [ext_resource type="Script" uid="uid://c1yn0ljd2aaa1" path="res://scripts/player.gd" id="1_ur7pv"]
 [ext_resource type="Texture2D" uid="uid://b1icsdjy1kxp5" path="res://assets/player/male_hero-combo_1.png" id="2_4ni07"]
@@ -17,6 +17,8 @@
 [ext_resource type="Texture2D" uid="uid://67p0nyqr2a45" path="res://assets/player/male_hero-run.png" id="17_t4otl"]
 [ext_resource type="AudioStream" uid="uid://cxltxdaftistf" path="res://assets/Sword Sound.mp3" id="19_4r5pv"]
 [ext_resource type="Texture2D" uid="uid://cfjl0o0hkkjga" path="res://assets/player/male_hero-walk.png" id="20_2dvfe"]
+[ext_resource type="PackedScene" uid="uid://bo7cgev2cws8m" path="res://scenes/hurtbox.tscn" id="20_60mlk"]
+[ext_resource type="PackedScene" uid="uid://d07igr3u2imto" path="res://scenes/hitbox.tscn" id="21_i4ail"]
 [ext_resource type="Texture2D" uid="uid://cpmdw4e8qejuc" path="res://assets/player/male_hero-wall_jump.png" id="22_fdfoy"]
 [ext_resource type="Texture2D" uid="uid://c8hm1l86oribv" path="res://assets/player/male_hero-wall_slide.png" id="23_hhpqf"]
 
@@ -958,15 +960,22 @@ animations = [{
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_d2wvv"]
 size = Vector2(12, 28)
 
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_i4ail"]
+size = Vector2(12, 28)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_a38lo"]
+size = Vector2(28, 37)
+
 [node name="Player" type="CharacterBody2D"]
 z_index = 1
 script = ExtResource("1_ur7pv")
 
 [node name="Animater" type="AnimatedSprite2D" parent="."]
 sprite_frames = SubResource("SpriteFrames_y4r1p")
-animation = &"walk"
+animation = &"attack 3"
 autoplay = "idle"
-frame_progress = 0.298943
+frame = 10
+frame_progress = 1.0
 
 [node name="side" type="RayCast2D" parent="Animater"]
 position = Vector2(0, -13)
@@ -1004,5 +1013,26 @@ stream = ExtResource("19_4r5pv")
 volume_db = 14.856
 attenuation = 0.870551
 
+[node name="Hurtbox" parent="." instance=ExtResource("20_60mlk")]
+position = Vector2(0, -2)
+collision_layer = 64
+collision_mask = 0
+
+[node name="CollisionShape2D" parent="Hurtbox" index="0"]
+position = Vector2(0, 2)
+shape = SubResource("RectangleShape2D_i4ail")
+
+[node name="Hitbox" parent="." instance=ExtResource("21_i4ail")]
+collision_layer = 144
+collision_mask = 0
+
+[node name="CollisionShape2D" parent="Hitbox" index="0"]
+position = Vector2(32, -2.5)
+shape = SubResource("RectangleShape2D_a38lo")
+
 [connection signal="timeout" from="cooldown" to="." method="cooldown_end"]
 [connection signal="timeout" from="combo" to="." method="combo_end"]
+[connection signal="area_entered" from="Hitbox" to="." method="enemy_hurt_entered"]
+
+[editable path="Hurtbox"]
+[editable path="Hitbox"]

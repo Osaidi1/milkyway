@@ -11,6 +11,9 @@ extends CharacterBody2D
 @onready var jump_buffer: Timer = $"jump buffer"
 @onready var cutscenes: AnimationPlayer = $"../Cutscenes"
 @onready var sword_sound_2: AudioStreamPlayer2D = $SwordSound2
+@onready var hurtbox: Area2D = $Hurtbox
+@onready var hitbox: Area2D = $Hitbox
+@onready var hit_collision: CollisionShape2D = $Hitbox/CollisionShape2D
 
 @export var WALK_SPEED: int = 55
 @export var RUN_SPEED: int = 145
@@ -46,7 +49,8 @@ var wall_stay_time: float = 0.05
 var att_state: int = 1
 var can_attack: bool = true
 
-func _ready():
+func _ready() -> void:
+	hit_collision.disabled = true
 	is_dying = false
 	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
 	#position = vars.player_spawn
@@ -154,26 +158,30 @@ func _physics_process(delta: float) -> void:
 	if is_on_floor() and !coyote.is_stopped():
 		coyote.stop()
 
-func speed_set():
+func speed_set() -> void:
 	if Input.is_action_pressed("run"):
 		speed = RUN_SPEED
 	else:
 		speed = WALK_SPEED
 
-func face_direction():
+func face_direction() -> void:
 	if is_in_wall: return
 	if direction < 0 or (is_in_wall and (Input.is_action_just_pressed("jump") or is_on_floor())):
 		animater.flip_h = true
 		looking_toward = -1
 		side.target_position = Vector2(-6.5, 0)
 		side2.target_position = Vector2(-6.5, 0)
+		hurtbox.scale.x = -1
+		hitbox.scale.x = -1
 	elif direction > 0 or (is_in_wall and (Input.is_action_just_pressed("jump") or is_on_floor())):
 		animater.flip_h = false
 		looking_toward = 1
 		side.target_position = Vector2(6.5, 0)
 		side2.target_position = Vector2(6.5, 0)
+		hurtbox.scale.x = 1
+		hitbox.scale.x = 1
 
-func anims():
+func anims() -> void:
 	if is_dying or is_hurting or is_attacking: return
 	if is_dashing:
 		animater.play("dash")
@@ -197,13 +205,14 @@ func anims():
 	else:
 		animater.play("idle")
 
-func attack():
+func attack() -> void:
 	if is_attacking: return
 	if att_state == 1:
 		is_attacking = true
-		await get_tree().create_timer(0.05).timeout
 		animater.play("attack 1")
+		hit_collision.disabled = false
 		await get_tree().create_timer(0.27).timeout
+		hit_collision.disabled = true
 		animater.play("attack 1 recover")
 		await get_tree().create_timer(0.443).timeout
 		is_attacking = false
@@ -219,7 +228,10 @@ func attack():
 		animater.play("attack 2")
 		sword_sound_2.pitch_scale = rng.randf_range(0.9, 1.2)
 		sword_sound_2.play()
-		await get_tree().create_timer(0.5).timeout
+		await get_tree().create_timer(0.25).timeout
+		hit_collision.disabled = false
+		await get_tree().create_timer(0.25).timeout
+		hit_collision.disabled = true
 		animater.play("attack 2 recover")
 		await get_tree().create_timer(0.44).timeout
 		is_attacking = false
@@ -233,7 +245,10 @@ func attack():
 	elif att_state == 3:
 		is_attacking = true
 		animater.play("attack 3")
-		await get_tree().create_timer(1).timeout
+		await get_tree().create_timer(0.272727).timeout
+		hit_collision.disabled = false
+		await get_tree().create_timer(0.727272).timeout
+		hit_collision.disabled = true
 		animater.play("attack 3 recover")
 		await get_tree().create_timer(0.5).timeout
 		is_attacking = false
@@ -242,7 +257,7 @@ func attack():
 		cooldown.start()
 		att_state = 1
 
-func jump():
+func jump() -> void:
 	if is_attacking: return
 	is_jumping = true
 	velocity.y = JUMP_VELOCITY
@@ -252,10 +267,11 @@ func jump():
 		is_in_wall = false
 		wall_jump_lock = wall_jump_lock_time
 
-func health_set():
+func health_set() -> void:
 	HEALTH = clamp(HEALTH, 0, 100)
 
-func health_change(diff):
+func health_change(diff) -> void:
+	if is_dying: return
 	var prev_health = HEALTH
 	HEALTH += diff
 	if prev_health > HEALTH:
@@ -264,13 +280,15 @@ func health_change(diff):
 		await get_tree().create_timer(0.624).timeout
 		is_hurting = false
 
-func die():
+func die() -> void:
 	is_dying = true
 	animater.play("death")
+	collision.disabled = true
+	velocity.y = 0
 	await get_tree().create_timer(3).timeout
 	reload()
 
-func dash():
+func dash() -> void:
 	is_dashing = true
 	dash_time = 0.0
 
@@ -279,7 +297,7 @@ func in_void(body: Node2D) -> void:
 		await get_tree().create_timer(1).timeout
 		get_tree().reload_current_scene()
 
-func wall_logic():
+func wall_logic() -> void:
 	if side.is_colliding() and side2.is_colliding() and !is_on_floor() and velocity.y > 0 and vars.wall_slide_jump_unlocked:
 		velocity.x = 0
 		is_in_wall = true
@@ -302,6 +320,14 @@ func _on_danger_body_entered(body: Node2D) -> void:
 		await get_tree().create_timer(1).timeout
 		reload()
 
-func reload():
+func reload() -> void:
 	await get_tree().create_timer(3).timeout
 	get_tree().reload_current_scene()
+
+func enemy_hurt_entered(area: Area2D) -> void:
+	if att_state == 1:
+		area.get_parent().health_change(-20)
+	if att_state == 2:
+		area.get_parent().health_change(-30)
+	if att_state == 3:
+		area.get_parent().health_change(-50)
