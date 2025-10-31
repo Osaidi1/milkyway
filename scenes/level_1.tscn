@@ -36,8 +36,8 @@ libraries = {
 }
 
 [node name="Player" parent="." instance=ExtResource("1_bswci")]
-position = Vector2(1092, -126)
+position = Vector2(705, -152)
 
 [node name="Skeleton" parent="." instance=ExtResource("4_5xbjy")]
-position = Vector2(1393, -26)
+position = Vector2(1133, -37)
 scale = Vector2(1.2, 1.2)

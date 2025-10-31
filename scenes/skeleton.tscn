@@ -302,7 +302,7 @@ animations = [{
 }],
 "loop": true,
 "name": &"idle",
-"speed": 7.0
+"speed": 6.0
 }, {
 "frames": [{
 "duration": 1.0,
@@ -343,11 +343,11 @@ animations = [{
 }],
 "loop": true,
 "name": &"walk",
-"speed": 17.0
+"speed": 12.0
 }]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_haw2w"]
-size = Vector2(16.1667, 29.1111)
+size = Vector2(11.1111, 29.1111)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_txkty"]
 size = Vector2(7.77777, 5.55556)
@@ -358,17 +358,16 @@ script = ExtResource("7_w4hcs")
 
 [node name="Animater" type="AnimatedSprite2D" parent="."]
 sprite_frames = SubResource("SpriteFrames_w4hcs")
-animation = &"attack 1"
+animation = &"walk"
 autoplay = "idle"
-frame = 12
-frame_progress = 1.0
+frame_progress = 0.107348
 
 [node name="Turn" type="RayCast2D" parent="Animater"]
 position = Vector2(23.3333, 0)
 target_position = Vector2(0, 13)
 
 [node name="Collision" type="CollisionShape2D" parent="."]
-position = Vector2(-1.41667, 0.111111)
+position = Vector2(1.32455e-07, 0.111111)
 shape = SubResource("RectangleShape2D_haw2w")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]

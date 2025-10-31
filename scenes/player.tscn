@@ -918,7 +918,7 @@ animations = [{
 }],
 "loop": true,
 "name": &"walk",
-"speed": 8.0
+"speed": 10.0
 }, {
 "frames": [{
 "duration": 1.0,
@@ -964,8 +964,9 @@ script = ExtResource("1_ur7pv")
 
 [node name="Animater" type="AnimatedSprite2D" parent="."]
 sprite_frames = SubResource("SpriteFrames_y4r1p")
-animation = &"idle"
+animation = &"walk"
 autoplay = "idle"
+frame_progress = 0.298943
 
 [node name="side" type="RayCast2D" parent="Animater"]
 position = Vector2(0, -13)
