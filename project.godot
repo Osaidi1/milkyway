@@ -76,8 +76,6 @@ down={
 
 2d_physics/layer_1="Player"
 2d_physics/layer_2="Enemy"
-2d_physics/layer_5="Player Hit"
-2d_physics/layer_6="Enemy Hit"
 2d_physics/layer_7="Player Hurt"
 2d_physics/layer_8="Enemy Hurt"
 

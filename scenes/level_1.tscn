@@ -3,8 +3,8 @@
 [ext_resource type="PackedScene" uid="uid://3ffbqokcdysi" path="res://scenes/player.tscn" id="1_bswci"]
 [ext_resource type="PackedScene" uid="uid://br5apb2urv30b" path="res://scenes/ground.tscn" id="2_rus8k"]
 [ext_resource type="PackedScene" uid="uid://c5g0jfg21np50" path="res://scenes/world border.tscn" id="3_rus8k"]
-[ext_resource type="PackedScene" uid="uid://bjcnwi0wp4dnl" path="res://scenes/skeleton.tscn" id="4_5xbjy"]
 [ext_resource type="PackedScene" uid="uid://cns1o4diay4ci" path="res://ui/fps counter.tscn" id="5_4nkto"]
+[ext_resource type="PackedScene" uid="uid://bth78kmorbqct" path="res://scenes/slime.tscn" id="5_fcfvj"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_bswci"]
 size = Vector2(5869.5, 140)
@@ -39,13 +39,12 @@ libraries = {
 [node name="Player" parent="." instance=ExtResource("1_bswci")]
 position = Vector2(705, -152)
 
-[node name="Skeleton" parent="." node_paths=PackedStringArray("player") instance=ExtResource("4_5xbjy")]
-position = Vector2(1133, -37)
-scale = Vector2(1.2, 1.2)
-player = NodePath("../Player")
-
 [node name="FPS" parent="." instance=ExtResource("5_4nkto")]
 offset_left = 642.0
 offset_top = 78.0
 offset_right = 642.0
 offset_bottom = 78.0
+
+[node name="Slime" parent="." node_paths=PackedStringArray("player") instance=ExtResource("5_fcfvj")]
+position = Vector2(1134, -17)
+player = NodePath("../Player")

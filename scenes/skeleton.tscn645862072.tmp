@@ -459,6 +459,8 @@ scale = Vector2(0.9, 0.9)
 collision_layer = 2
 collision_mask = 2
 script = ExtResource("7_w4hcs")
+HEALTH = null
+SPEED = null
 
 [node name="Animater" type="AnimatedSprite2D" parent="."]
 sprite_frames = SubResource("SpriteFrames_w4hcs")
@@ -472,10 +474,12 @@ position = Vector2(23.3333, 0)
 target_position = Vector2(0, 13)
 
 [node name="Collision" type="CollisionShape2D" parent="."]
+visible = false
 position = Vector2(1.32455e-07, 0.111111)
 shape = SubResource("RectangleShape2D_haw2w")
 
 [node name="Collision 2" type="CollisionShape2D" parent="."]
+visible = false
 position = Vector2(10.5556, 11.1111)
 shape = SubResource("RectangleShape2D_txkty")
 
@@ -483,22 +487,30 @@ shape = SubResource("RectangleShape2D_txkty")
 autostart = true
 
 [node name="AttackRange" type="Area2D" parent="."]
+visible = false
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="AttackRange"]
 position = Vector2(0, -6.66667)
 shape = SubResource("RectangleShape2D_5pgwy")
 
-[node name="CheckPlayer" type="Area2D" parent="."]
+[node name="Range" type="Area2D" parent="."]
+visible = false
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="CheckPlayer"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Range"]
 position = Vector2(-3.70873e-06, 5.29819e-07)
 shape = SubResource("RectangleShape2D_ivqcw")
 
-[node name="CollisionShape2D2" type="CollisionShape2D" parent="CheckPlayer"]
+[node name="CollisionShape2D2" type="CollisionShape2D" parent="Range"]
 position = Vector2(-1.05964e-06, -32.7778)
 shape = SubResource("RectangleShape2D_bnirc")
 
+[node name="VisibleOnScreenNotifier2D" type="VisibleOnScreenNotifier2D" parent="."]
+visible = false
+position = Vector2(0.555556, 0.555554)
+scale = Vector2(2.94444, 1.72222)
+
 [node name="Hurtbox" parent="." instance=ExtResource("3_ivqcw")]
+visible = false
 position = Vector2(1.11111, -1.11111)
 collision_layer = 128
 collision_mask = 0
@@ -514,15 +526,11 @@ collision_mask = 64
 position = Vector2(18.8889, -3.33333)
 shape = SubResource("RectangleShape2D_w4hcs")
 
-[node name="VisibleOnScreenEnabler2D" type="VisibleOnScreenEnabler2D" parent="."]
-position = Vector2(0, -1.11111)
-scale = Vector2(3.38889, 2)
-
 [connection signal="timeout" from="Timer" to="." method="timer_end"]
 [connection signal="body_entered" from="AttackRange" to="." method="attack"]
 [connection signal="body_exited" from="AttackRange" to="." method="attack_exit"]
-[connection signal="body_entered" from="CheckPlayer" to="." method="player_in_range"]
-[connection signal="body_exited" from="CheckPlayer" to="." method="player_not_in_range"]
+[connection signal="body_entered" from="Range" to="." method="player_in_range"]
+[connection signal="body_exited" from="Range" to="." method="player_not_in_range"]
 [connection signal="area_entered" from="Hitbox" to="." method="player_hurt_entered"]
 
 [editable path="Hurtbox"]

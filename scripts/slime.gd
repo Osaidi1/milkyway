@@ -1,16 +1,20 @@
-class_name Skeleton
+class_name Slime
 extends CharacterBody2D
 
-@onready var timer: Timer = $Timer
 @onready var animater: AnimatedSprite2D = $Animater
 @onready var turn: RayCast2D = $Animater/Turn
+@onready var attack_range: Area2D = $AttackRange
+@onready var hit_collision: CollisionShape2D = $Hitbox/CollisionShape2D
 @onready var hurtbox: Area2D = $Hurtbox
 @onready var hitbox: Area2D = $Hitbox
-@onready var hit_collision: CollisionShape2D = $Hitbox/CollisionShape2D
+@onready var collision: CollisionShape2D = $Collision
 
-@export var HEALTH := 100
-@export var SPEED := 50
+@export var HEALTH := 60
+@export var SPEED := 40
 @export var player: CharacterBody2D
+
+@export_enum("red", "orange", "yellow", "green", "blue", "peach", "gray", "pink") 
+var slime_color: String = "blue"
 
 var rng := RandomNumberGenerator.new()
 var player_pos: Vector2
@@ -20,14 +24,12 @@ var last_dir := dir
 var friction := 0.9
 var is_chasing := false
 var is_attacking := false
-var is_hurting := false
 var is_wandering := true
 var is_walking := true
-var is_stopped := false
+var is_hurting := false
 
 func _ready() -> void:
 	hit_collision.disabled = true
-	random_time()
 
 func _physics_process(delta: float) -> void:
 	# Add the gravity.
@@ -44,14 +46,13 @@ func _physics_process(delta: float) -> void:
 		
 		#Move Toward Player
 		var direction = (player_pos - position).normalized()
-		velocity.x = direction.x * SPEED * 1.5
+		if !is_attacking:
+			velocity.x = direction.x * SPEED
+		elif is_attacking:
+			velocity.x = 0
 		
 		#Turn while chase
 		dir = sign(direction.x)
-		
-		#No Move while Attack
-		if is_attacking:
-			velocity.x = 0
 	
 	#Wander Logic
 	if is_wandering:
@@ -65,8 +66,6 @@ func _physics_process(delta: float) -> void:
 		#Add Velocity
 		if is_walking:
 			velocity.x = (SPEED * dir * delta) * 60
-		elif is_stopped:
-			velocity.x *= (friction * delta) * 16
 	
 	#Call Funcs
 	facing_dir()
@@ -79,34 +78,19 @@ func facing_dir() -> void:
 	if dir != last_dir:
 		animater.flip_h = dir < 0
 		turn.position.x *= -1
+		turn.target_position.x *= -1
 		last_dir = dir
-		hurtbox.scale.x = dir
+		attack_range.scale.x = dir
 		hitbox.scale.x = dir
-
-func random_time() -> void:
-	if is_wandering:
-		timer.wait_time = rng.randf_range(4.0, 7.0)
-		is_walking = true
-		is_stopped = false
-
-func timer_end() -> void:
-	if is_wandering:
-		is_walking = false
-		is_stopped = true
-		await get_tree().create_timer(rng.randf_range(1.0, 2.5)).timeout
-		random_time()
-		timer.start()
+		hurtbox.scale.x = dir
+		collision.position.x = -1
 
 func anims() -> void:
-	if is_hurting:
-		animater.play("hurt")
 	if is_attacking: return
-	if is_chasing:
-		animater.play("chase walk")
+	elif is_hurting:
+		animater.play(slime_color + " hurt")
 	elif is_walking:
-		animater.play("walk")
-	elif is_stopped:
-		animater.play("idle")
+		animater.play(slime_color + " walk")
 
 func player_in_range(body: Node2D) -> void:
 	if body is Player:
@@ -115,29 +99,22 @@ func player_in_range(body: Node2D) -> void:
 
 func player_not_in_range(body: Node2D) -> void:
 	if body is Player:
-		animater.play("idle")
 		is_chasing = false
-		velocity.x = 0
-		await get_tree().create_timer(2).timeout
+		await get_tree().create_timer(0.75).timeout
+		dir = -dir
 		is_wandering = true
 
 func attack(body: Node2D) -> void:
 	if body is Player:
 		is_attacking = true
 		while is_attacking:
-			await get_tree().create_timer(0.5).timeout
-			is_attacking = true
-			animater.play("attack")
+			animater.play(slime_color + " attack")
 			await get_tree().create_timer(0.2).timeout
 			hit_collision.disabled = false
-			await get_tree().create_timer(0.2).timeout
+			await get_tree().create_timer(0.6).timeout
 			hit_collision.disabled = true
 			await get_tree().create_timer(0.2).timeout
-			hit_collision.disabled = false
-			await get_tree().create_timer(0.2).timeout
-			hit_collision.disabled = true
-			await get_tree().create_timer(0.3).timeout
-			await get_tree().create_timer(0.5).timeout
+			await get_tree().create_timer(1).timeout
 
 func attack_exit(body: Node2D) -> void:
 	if body is Player:
@@ -148,12 +125,13 @@ func health_set() -> void:
 
 func health_change(diff) -> void:
 	var prev_health = HEALTH
-	print("changed")
 	HEALTH += diff
 	if prev_health > HEALTH:
 		is_hurting = true
 		await get_tree().create_timer(0.5).timeout
 		is_hurting = false
 
-func player_hurt_entered(_area: Area2D) -> void:
-	player.health_change(-20)
+func player_hurt_entered(area: Area2D) -> void:
+	if area.get_parent() is Player and player:
+		print("here")
+		player.health_change(-20)

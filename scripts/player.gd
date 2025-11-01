@@ -58,7 +58,7 @@ func _ready() -> void:
 func _unhandled_input(event: InputEvent) -> void:
 	#Dash
 	if Input.is_action_just_pressed("dash") and !is_attacking and !is_dying and !is_hurting and !is_in_wall and !is_dashing and vars.dash_unlocked:
-		dash()
+		health_change(-20)
 	
 	#Jump
 	if is_on_floor() or !coyote.is_stopped() or is_in_wall:
@@ -277,6 +277,7 @@ func health_change(diff) -> void:
 	if prev_health > HEALTH:
 		is_hurting = true
 		animater.play("hurt")
+		velocity.x = -looking_toward * 30
 		await get_tree().create_timer(0.624).timeout
 		is_hurting = false
 
@@ -325,9 +326,13 @@ func reload() -> void:
 	get_tree().reload_current_scene()
 
 func enemy_hurt_entered(area: Area2D) -> void:
-	if att_state == 1:
-		area.get_parent().health_change(-20)
-	if att_state == 2:
-		area.get_parent().health_change(-30)
-	if att_state == 3:
-		area.get_parent().health_change(-50)
+	if area.get_parent() is Slime:
+		if att_state == 1:
+			area.get_parent().health_change(-20)
+		if att_state == 2:
+			area.get_parent().health_change(-30)
+		if att_state == 3:
+			area.get_parent().health_change(-50)
+
+func enemy_hit_entered(_area: Area2D) -> void:
+	health_change(-20)
