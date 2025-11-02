@@ -15,16 +15,17 @@ extends CharacterBody2D
 @onready var hitbox: Area2D = $Hitbox
 @onready var hit_collision: CollisionShape2D = $Hitbox/CollisionShape2D
 
-@export var WALK_SPEED: int = 55
-@export var RUN_SPEED: int = 145
-@export var DASH_SPEED: int = 500
-@export var JUMP_VELOCITY: int = -400
-@export var HEALTH: int = 100
-@export var SLIDE_FRICTION: int = 60
-@export var WALL_JUMP_POWER: int = 100
+@export var WALK_SPEED := 55
+@export var RUN_SPEED := 145
+@export var DASH_SPEED := 500
+@export var JUMP_VELOCITY : = -400
+@export var HEALTH := 100
+@export var SLIDE_FRICTION := 60
+@export var WALL_JUMP_POWER := 100
 
 enum attack_state {Att1, Att2, Att3}
 var rng = RandomNumberGenerator.new()
+var KNOCKBACK : Vector2 = Vector2.ZERO
 
 var speed: int
 var direction: float
@@ -40,14 +41,15 @@ var is_hanging: bool
 var fall_start_played: bool
 var was_on_floor: bool
 var dash_time: float
-var dash_duration: float = 0.35
-var looking_toward: int = 1
-var wall_jump_lock: float = 0.0
-var wall_jump_lock_time: float = 0.2
-var wall_stay: float = 0.0
-var wall_stay_time: float = 0.05
-var att_state: int = 1
-var can_attack: bool = true
+var dash_duration := 0.35
+var looking_toward := 1
+var wall_jump_lock := 0.0
+var wall_jump_lock_time := 0.2
+var wall_stay := 0.0
+var wall_stay_time := 0.05
+var knockback_timer := 0.0
+var att_state := 1
+var can_attack := true
 
 func _ready() -> void:
 	hit_collision.disabled = true
@@ -58,7 +60,7 @@ func _ready() -> void:
 func _unhandled_input(event: InputEvent) -> void:
 	#Dash
 	if Input.is_action_just_pressed("dash") and !is_attacking and !is_dying and !is_hurting and !is_in_wall and !is_dashing and vars.dash_unlocked:
-		health_change(-20)
+		dash()
 	
 	#Jump
 	if is_on_floor() or !coyote.is_stopped() or is_in_wall:
@@ -89,11 +91,17 @@ func _physics_process(delta: float) -> void:
 		is_falling = false
 		is_wall_jumping = false
 	
+	#Knockback
+	if knockback_timer > 0.0:
+		velocity = KNOCKBACK
+		knockback_timer -= delta
+		if knockback_timer <= 0.0:
+			KNOCKBACK = Vector2.ZERO
+	
 	#Falling
 	if !Input.is_action_just_pressed("jump") and velocity.y > 0:
 		is_falling = true
 		velocity.y *= 1.02
-		velocity.normalized()
 	
 	#Jump Buffer
 	if Input.is_action_pressed("jump"):
@@ -283,6 +291,8 @@ func health_change(diff) -> void:
 
 func die() -> void:
 	is_dying = true
+	animater.play("hurt")
+	await get_tree().create_timer(0.625).timeout
 	animater.play("death")
 	collision.disabled = true
 	velocity.y = 0
@@ -327,12 +337,21 @@ func reload() -> void:
 
 func enemy_hurt_entered(area: Area2D) -> void:
 	if area.get_parent() is Slime:
+		var knockback_direction = (area.global_position - global_position).normalized()
 		if att_state == 1:
 			area.get_parent().health_change(-20)
+			area.get_parent().apply_knockback(knockback_direction, 150, 0.2)
 		if att_state == 2:
 			area.get_parent().health_change(-30)
+			area.get_parent().apply_knockback(knockback_direction, 175, 0.25)
 		if att_state == 3:
 			area.get_parent().health_change(-50)
+			area.get_parent().apply_knockback(knockback_direction, 200, 0.3)
 
 func enemy_hit_entered(_area: Area2D) -> void:
 	health_change(-20)
+
+func apply_knockback(direction_for_knock: Vector2, force: float, knockback_duration: float) -> void:
+	KNOCKBACK = direction_for_knock * force
+	KNOCKBACK.y *= 0
+	knockback_timer = knockback_duration
