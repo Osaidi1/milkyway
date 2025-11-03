@@ -1,0 +1,21 @@
+[gd_scene load_steps=3 format=3 uid="uid://bj2owap1qsxi0"]
+
+[ext_resource type="Script" uid="uid://ba0bv51e11n14" path="res://scripts/respawn.gd" id="1_grv7o"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_k7hlv"]
+size = Vector2(20, 98)
+
+[node name="Respawn" type="Node2D"]
+script = ExtResource("1_grv7o")
+Number = 1
+
+[node name="Spawn" type="Marker2D" parent="."]
+position = Vector2(26, -8)
+
+[node name="Check" type="Area2D" parent="."]
+
+[node name="Collision" type="CollisionShape2D" parent="Check"]
+position = Vector2(0, -39)
+shape = SubResource("RectangleShape2D_k7hlv")
+
+[connection signal="body_entered" from="Check" to="." method="_on_check_body_entered"]

@@ -1,0 +1,14 @@
+[gd_scene load_steps=3 format=3 uid="uid://ct8dedup8174t"]
+
+[ext_resource type="Script" uid="uid://bo16vhfoo8hne" path="res://scripts/in_water.gd" id="1_festg"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_wxbeg"]
+
+[node name="InWater" type="Area2D"]
+script = ExtResource("1_festg")
+
+[node name="Collision" type="CollisionShape2D" parent="."]
+shape = SubResource("RectangleShape2D_wxbeg")
+
+[connection signal="body_entered" from="." to="." method="_on_body_entered"]
+[connection signal="body_exited" from="." to="." method="_on_body_exited"]

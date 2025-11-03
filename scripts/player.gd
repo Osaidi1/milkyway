@@ -55,7 +55,7 @@ func _ready() -> void:
 	hit_collision.disabled = true
 	is_dying = false
 	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
-	#position = vars.player_spawn
+	position = vars.player_spawn
 
 func _unhandled_input(event: InputEvent) -> void:
 	#Dash
@@ -70,14 +70,25 @@ func _unhandled_input(event: InputEvent) -> void:
 	#Attack
 	if event.is_action_released("attack") and !is_jumping and !is_falling and !is_dying and !is_hurting and !is_in_wall and can_attack and vars.attack_unlocked:
 		attack()
+	
+	if event.is_action_pressed("temp"):
+		HEALTH -= 100
 
 func _physics_process(delta: float) -> void:
+	#Dying
 	if is_dying: return
+	
 	# Add the gravity.
 	if not is_on_floor():
 		velocity += get_gravity() * delta
 	
 	#Set Variables
+	if vars.in_water:
+		z_index = -5
+		velocity.y *= 0.8
+		velocity.x *= 0.2
+	else:
+		z_index = 1
 	was_on_floor = is_on_floor()
 	if HEALTH <= 0:
 		die()

@@ -1,9 +1,18 @@
 extends Node
 
-var dash_unlocked := true
-var wall_slide_jump_unlocked := false
-var attack_unlocked := true
-var attack_2_unlocked := false
-var attack_3_unlocked := false
+@export var dash_unlocked := true
+@export var wall_slide_jump_unlocked := false
+@export var attack_unlocked := true
+@export var attack_2_unlocked := false
+@export var attack_3_unlocked := false
 
-var player_spawn := Vector2(-261, 82)
+var in_water: bool
+
+var player_spawn := Vector2(-150, -160)
+var checkpoints = {}
+
+func activate_checkpoint(id):
+	checkpoints[id] = true
+
+func is_checkpoint_active(id):
+	return checkpoints.get(id, false)
