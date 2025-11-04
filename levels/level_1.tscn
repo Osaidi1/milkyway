@@ -1,32 +1,77 @@
-[gd_scene load_steps=22 format=3 uid="uid://kvjcgugvhw8a"]
+[gd_scene load_steps=30 format=3 uid="uid://kvjcgugvhw8a"]
 
 [ext_resource type="PackedScene" uid="uid://3ffbqokcdysi" path="res://scenes/player.tscn" id="1_bswci"]
-[ext_resource type="PackedScene" uid="uid://br5apb2urv30b" path="res://scenes/ground_level_1.tscn" id="2_rus8k"]
+[ext_resource type="PackedScene" uid="uid://br5apb2urv30b" path="res://levels/ground_level_1.tscn" id="2_rus8k"]
 [ext_resource type="PackedScene" uid="uid://c5g0jfg21np50" path="res://scenes/world border.tscn" id="3_rus8k"]
 [ext_resource type="PackedScene" uid="uid://cns1o4diay4ci" path="res://ui/fps counter.tscn" id="5_4nkto"]
+[ext_resource type="Texture2D" uid="uid://bek14s3ujfecp" path="res://assets/Chain1.png" id="5_08mmt"]
 [ext_resource type="PackedScene" uid="uid://ct8dedup8174t" path="res://scenes/in_water.tscn" id="5_fcfvj"]
 [ext_resource type="PackedScene" uid="uid://vdr0wgxw2yfm" path="res://scenes/void.tscn" id="5_pa8r4"]
+[ext_resource type="Texture2D" uid="uid://e6unjsbm2xd7" path="res://assets/platform.png" id="6_5ot28"]
 [ext_resource type="PackedScene" uid="uid://bj2owap1qsxi0" path="res://scenes/respawn.tscn" id="7_pa8r4"]
+[ext_resource type="PackedScene" uid="uid://cid68hgymq6g1" path="res://levels/go_to_next_level.tscn" id="8_l53as"]
 
 [sub_resource type="Animation" id="Animation_bswci"]
 resource_name = "intro"
+length = 30.0
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_rus8k"]
 _data = {
 &"intro": SubResource("Animation_bswci")
 }
 
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_aerfg"]
+size = Vector2(43, 1.5)
+
+[sub_resource type="Animation" id="Animation_08mmt"]
+resource_name = "move"
+length = 20.0
+loop_mode = 2
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Platform:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 20),
+"transitions": PackedFloat32Array(-2, -5),
+"update": 0,
+"values": [Vector2(972.555, 752), Vector2(972.555, 1.8)]
+}
+
+[sub_resource type="Animation" id="Animation_5ot28"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Platform:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(982, 752)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_aerfg"]
+_data = {
+&"RESET": SubResource("Animation_5ot28"),
+&"move": SubResource("Animation_08mmt")
+}
+
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_fcfvj"]
-size = Vector2(249, 141)
+size = Vector2(249, 184)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_e3sih"]
-size = Vector2(248, 158)
+size = Vector2(248, 188)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_7nomh"]
-size = Vector2(96, 171)
+size = Vector2(96, 192)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_1s4pk"]
-size = Vector2(96, 134)
+size = Vector2(96, 158)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_pa8r4"]
 size = Vector2(243, 269)
@@ -52,6 +97,9 @@ size = Vector2(86, 157.5)
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_6dial"]
 size = Vector2(69, 159.5)
 
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_3sk1a"]
+size = Vector2(1385, 80)
+
 [node name="Level1" type="Node2D"]
 
 [node name="FPS" parent="." instance=ExtResource("5_4nkto")]
@@ -63,15 +111,39 @@ offset_bottom = 78.0
 [node name="World" parent="." instance=ExtResource("2_rus8k")]
 
 [node name="Player" parent="." instance=ExtResource("1_bswci")]
-position = Vector2(-152, -162)
+position = Vector2(-134, 657)
 
 [node name="Border" parent="." instance=ExtResource("3_rus8k")]
-position = Vector2(-274, -207)
+position = Vector2(-337, 545)
 
 [node name="Cutscenes" type="AnimationPlayer" parent="."]
 libraries = {
 &"": SubResource("AnimationLibrary_rus8k")
 }
+
+[node name="Platform" type="Node2D" parent="."]
+
+[node name="Chain" type="Sprite2D" parent="Platform"]
+modulate = Color(0.544974, 0.544974, 0.544974, 1)
+position = Vector2(994, 373.5)
+scale = Vector2(1, 1.00132)
+texture = ExtResource("5_08mmt")
+
+[node name="Platform" type="Sprite2D" parent="Platform"]
+position = Vector2(982, 752)
+texture = ExtResource("6_5ot28")
+
+[node name="StaticBody2D" type="StaticBody2D" parent="Platform/Platform"]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Platform/Platform/StaticBody2D"]
+position = Vector2(-2.5, -1.75)
+shape = SubResource("RectangleShape2D_aerfg")
+
+[node name="MoveUp" type="AnimationPlayer" parent="Platform"]
+libraries = {
+&"": SubResource("AnimationLibrary_aerfg")
+}
+autoplay = "move"
 
 [node name="Dangers" type="Node2D" parent="."]
 position = Vector2(1519, 363)
@@ -80,28 +152,28 @@ position = Vector2(1519, 363)
 position = Vector2(4, -15)
 
 [node name="Collision" parent="Dangers/Void" index="0"]
-position = Vector2(21.5, 32.5)
+position = Vector2(21.5, 11)
 shape = SubResource("RectangleShape2D_fcfvj")
 
 [node name="Void2" parent="Dangers" instance=ExtResource("5_pa8r4")]
 position = Vector2(297, 20)
 
 [node name="Collision" parent="Dangers/Void2" index="0"]
-position = Vector2(0, 6)
+position = Vector2(0, -9)
 shape = SubResource("RectangleShape2D_e3sih")
 
 [node name="Void3" parent="Dangers" instance=ExtResource("5_pa8r4")]
 position = Vector2(777, 65)
 
 [node name="Collision" parent="Dangers/Void3" index="0"]
-position = Vector2(0, 5.5)
+position = Vector2(0, -5)
 shape = SubResource("RectangleShape2D_7nomh")
 
 [node name="Void4" parent="Dangers" instance=ExtResource("5_pa8r4")]
 position = Vector2(889, 93)
 
 [node name="Collision" parent="Dangers/Void4" index="0"]
-position = Vector2(0, 16)
+position = Vector2(0, 4)
 shape = SubResource("RectangleShape2D_1s4pk")
 
 [node name="Void5" parent="Dangers" instance=ExtResource("5_pa8r4")]
@@ -190,11 +262,21 @@ position = Vector2(2832, 513)
 position = Vector2(0.5, -12.75)
 shape = SubResource("RectangleShape2D_6dial")
 
-[node name="Respawn" parent="." instance=ExtResource("7_pa8r4")]
-position = Vector2(-57, -67)
+[node name="Respawns" type="Node2D" parent="."]
+position = Vector2(1233, 41)
 
-[node name="Respawn2" parent="." instance=ExtResource("7_pa8r4")]
-position = Vector2(2019, 151)
+[node name="Respawn" parent="Respawns" instance=ExtResource("7_pa8r4")]
+
+[node name="Respawn2" parent="Respawns" instance=ExtResource("7_pa8r4")]
+position = Vector2(2076, 218)
+
+[node name="Go To Next Level" parent="." instance=ExtResource("8_l53as")]
+position = Vector2(3744, 1077)
+level = 1
+
+[node name="Collision" parent="Go To Next Level" index="0"]
+position = Vector2(-22.5, 533)
+shape = SubResource("RectangleShape2D_3sk1a")
 
 [editable path="Dangers/Void"]
 [editable path="Dangers/Void2"]
@@ -212,3 +294,4 @@ position = Vector2(2019, 151)
 [editable path="Waters/InWater6"]
 [editable path="Waters/InWater7"]
 [editable path="Waters/InWater8"]
+[editable path="Go To Next Level"]

@@ -14,6 +14,7 @@ extends CharacterBody2D
 @onready var hurtbox: Area2D = $Hurtbox
 @onready var hitbox: Area2D = $Hitbox
 @onready var hit_collision: CollisionShape2D = $Hitbox/CollisionShape2D
+@onready var footsteps: AudioStreamPlayer2D = $Footsteps
 
 @export var WALK_SPEED := 55
 @export var RUN_SPEED := 145
@@ -59,7 +60,7 @@ func _ready() -> void:
 
 func _unhandled_input(event: InputEvent) -> void:
 	#Dash
-	if Input.is_action_just_pressed("dash") and !is_attacking and !is_dying and !is_hurting and !is_in_wall and !is_dashing and vars.dash_unlocked:
+	if Input.is_action_just_pressed("dash") and !is_attacking and !is_dying and !is_hurting and !is_in_wall and !is_dashing and vars.dash_unlocked and !vars.in_water:
 		dash()
 	
 	#Jump
@@ -164,6 +165,8 @@ func _physics_process(delta: float) -> void:
 	wall_logic()
 	
 	health_set()
+	
+	footstep()
 	
 	speed_set()
 	
@@ -313,6 +316,12 @@ func die() -> void:
 func dash() -> void:
 	is_dashing = true
 	dash_time = 0.0
+
+func footstep():
+	if direction != 0:
+		footsteps.pitch_scale = rng.randf_range(0.7, 1.4)
+		footsteps.play()
+		await get_tree().create_timer(0.5).timeout
 
 func in_void(body: Node2D) -> void:
 	if body is Player:
