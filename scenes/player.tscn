@@ -893,7 +893,7 @@ animations = [{
 }],
 "loop": true,
 "name": &"run",
-"speed": 10.0
+"speed": 11.0
 }, {
 "frames": [{
 "duration": 1.0,
@@ -980,7 +980,7 @@ script = ExtResource("1_ur7pv")
 
 [node name="Animater" type="AnimatedSprite2D" parent="."]
 sprite_frames = SubResource("SpriteFrames_y4r1p")
-animation = &"run"
+animation = &"idle"
 autoplay = "idle"
 
 [node name="side" type="RayCast2D" parent="Animater"]

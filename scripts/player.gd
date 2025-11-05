@@ -23,6 +23,7 @@ extends CharacterBody2D
 @export var HEALTH := 100
 @export var SLIDE_FRICTION := 60
 @export var WALL_JUMP_POWER := 100
+@export var BARS: CanvasLayer
 
 enum attack_state {Att1, Att2, Att3}
 var rng = RandomNumberGenerator.new()
@@ -30,17 +31,17 @@ var KNOCKBACK : Vector2 = Vector2.ZERO
 
 var speed: int
 var direction: float
-var is_jumping: bool
-var is_falling: bool
-var is_attacking: bool
-var is_dashing: bool
-var is_dying: bool
-var is_hurting: bool
-var is_in_wall: bool
-var is_wall_jumping: bool
-var is_hanging: bool
-var fall_start_played: bool
-var was_on_floor: bool
+var is_jumping := false
+var is_falling := false
+var is_attacking := false
+var is_dashing := false
+var is_dying := false
+var is_hurting := false
+var is_in_wall := false
+var is_wall_jumping := false
+var is_hanging := false
+var fall_start_played := false
+var was_on_floor := false
 var dash_time: float
 var dash_duration := 0.35
 var looking_toward := 1
@@ -60,7 +61,7 @@ func _ready() -> void:
 
 func _unhandled_input(event: InputEvent) -> void:
 	#Dash
-	if Input.is_action_just_pressed("dash") and !is_attacking and !is_dying and !is_hurting and !is_in_wall and !is_dashing and vars.dash_unlocked and !vars.in_water:
+	if Input.is_action_just_pressed("dash") and !is_attacking and !is_dying and !is_hurting and !is_in_wall and !is_dashing and vars.dash_unlocked and !vars.in_water and BARS.stamina_bar.value >= 35:
 		dash()
 	
 	#Jump
@@ -69,11 +70,11 @@ func _unhandled_input(event: InputEvent) -> void:
 			jump()
 	
 	#Attack
-	if event.is_action_released("attack") and !is_jumping and !is_falling and !is_dying and !is_hurting and !is_in_wall and can_attack and vars.attack_unlocked:
+	if event.is_action_released("attack") and !is_jumping and !is_falling and !is_dying and !is_hurting and !is_in_wall and can_attack and vars.attack_unlocked and BARS.stamina_bar.value >= 20:
 		attack()
 	
-	if event.is_action_pressed("temp"):
-		HEALTH -= 100
+	if event.is_action_pressed("down"):
+		health_change(-30)
 
 func _physics_process(delta: float) -> void:
 	#Dying
@@ -296,6 +297,9 @@ func health_change(diff) -> void:
 	if is_dying: return
 	var prev_health = HEALTH
 	HEALTH += diff
+	BARS.health_change(HEALTH)
+	print("here")
+	print(HEALTH)
 	if prev_health > HEALTH:
 		is_hurting = true
 		animater.play("hurt")
@@ -329,7 +333,7 @@ func in_void(body: Node2D) -> void:
 		get_tree().reload_current_scene()
 
 func wall_logic() -> void:
-	if side.is_colliding() and side2.is_colliding() and !is_on_floor() and velocity.y > 0 and vars.wall_slide_jump_unlocked:
+	if side.is_colliding() and side2.is_colliding() and !is_on_floor() and velocity.y > 0 and vars.wall_slide_jump_unlocked and BARS.stamina_bar.value >= 5:
 		velocity.x = 0
 		is_in_wall = true
 		wall_stay = wall_stay_time

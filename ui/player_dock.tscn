@@ -1,0 +1,70 @@
+[gd_scene load_steps=7 format=3 uid="uid://bq1kplm2r6k60"]
+
+[ext_resource type="Texture2D" uid="uid://cidw4tejel5fv" path="res://assets/healthbar.png" id="1_08gp2"]
+[ext_resource type="Script" uid="uid://hsc2vynofayc" path="res://scripts/player_dock.gd" id="1_lqp73"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_l32s1"]
+bg_color = Color(0, 0, 0, 0)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_08gp2"]
+bg_color = Color(0.989844, 5.48691e-06, 9.62615e-07, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_sihnx"]
+bg_color = Color(1, 1, 1, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_lqp73"]
+bg_color = Color(0, 0.580392, 0.713726, 1)
+
+[node name="PlayerDock" type="CanvasLayer"]
+script = ExtResource("1_lqp73")
+
+[node name="Container" type="Container" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Bars" type="Sprite2D" parent="Container"]
+position = Vector2(306, 74)
+scale = Vector2(7.27385, 7.32258)
+texture = ExtResource("1_08gp2")
+
+[node name="Health" type="ProgressBar" parent="Container/Bars"]
+z_index = -1
+offset_left = -36.0
+offset_top = -4.0
+offset_right = 36.0
+offset_bottom = 2.0
+theme_override_styles/background = SubResource("StyleBoxFlat_l32s1")
+theme_override_styles/fill = SubResource("StyleBoxFlat_08gp2")
+value = 99.5
+show_percentage = false
+metadata/_edit_use_anchors_ = true
+
+[node name="HealthBacklay" type="ProgressBar" parent="Container/Bars"]
+z_index = -2
+offset_left = -36.0
+offset_top = -4.0
+offset_right = 36.0
+offset_bottom = 2.0
+theme_override_styles/fill = SubResource("StyleBoxFlat_sihnx")
+value = 99.5
+show_percentage = false
+metadata/_edit_use_anchors_ = true
+
+[node name="Stamina" type="ProgressBar" parent="Container/Bars"]
+z_index = -2
+offset_left = -36.0194
+offset_top = 0.819383
+offset_right = 7.98055
+offset_bottom = 4.81938
+theme_override_styles/fill = SubResource("StyleBoxFlat_lqp73")
+value = 99.5
+show_percentage = false
+
+[node name="StaminaRegenWait" type="Timer" parent="Container/Bars"]
+wait_time = 2.0
+one_shot = true
+
+[connection signal="timeout" from="Container/Bars/StaminaRegenWait" to="Container/Bars" method="_on_stamina_regen_wait_timeout"]

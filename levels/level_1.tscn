@@ -1,9 +1,10 @@
-[gd_scene load_steps=30 format=3 uid="uid://kvjcgugvhw8a"]
+[gd_scene load_steps=31 format=3 uid="uid://kvjcgugvhw8a"]
 
 [ext_resource type="PackedScene" uid="uid://3ffbqokcdysi" path="res://scenes/player.tscn" id="1_bswci"]
 [ext_resource type="PackedScene" uid="uid://br5apb2urv30b" path="res://levels/ground_level_1.tscn" id="2_rus8k"]
 [ext_resource type="PackedScene" uid="uid://c5g0jfg21np50" path="res://scenes/world border.tscn" id="3_rus8k"]
 [ext_resource type="PackedScene" uid="uid://cns1o4diay4ci" path="res://ui/fps counter.tscn" id="5_4nkto"]
+[ext_resource type="PackedScene" uid="uid://bq1kplm2r6k60" path="res://ui/player_dock.tscn" id="5_5ot28"]
 [ext_resource type="Texture2D" uid="uid://bek14s3ujfecp" path="res://assets/Chain1.png" id="5_08mmt"]
 [ext_resource type="PackedScene" uid="uid://ct8dedup8174t" path="res://scenes/in_water.tscn" id="5_fcfvj"]
 [ext_resource type="PackedScene" uid="uid://vdr0wgxw2yfm" path="res://scenes/void.tscn" id="5_pa8r4"]
@@ -21,7 +22,7 @@ _data = {
 }
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_aerfg"]
-size = Vector2(43, 1.5)
+size = Vector2(43, 18.5)
 
 [sub_resource type="Animation" id="Animation_08mmt"]
 resource_name = "move"
@@ -110,8 +111,9 @@ offset_bottom = 78.0
 
 [node name="World" parent="." instance=ExtResource("2_rus8k")]
 
-[node name="Player" parent="." instance=ExtResource("1_bswci")]
+[node name="Player" parent="." node_paths=PackedStringArray("BARS") instance=ExtResource("1_bswci")]
 position = Vector2(-134, 657)
+BARS = NodePath("../PlayerDock")
 
 [node name="Border" parent="." instance=ExtResource("3_rus8k")]
 position = Vector2(-337, 545)
@@ -120,6 +122,9 @@ position = Vector2(-337, 545)
 libraries = {
 &"": SubResource("AnimationLibrary_rus8k")
 }
+
+[node name="PlayerDock" parent="." node_paths=PackedStringArray("player") instance=ExtResource("5_5ot28")]
+player = NodePath("../Player")
 
 [node name="Platform" type="Node2D" parent="."]
 
@@ -136,7 +141,7 @@ texture = ExtResource("6_5ot28")
 [node name="StaticBody2D" type="StaticBody2D" parent="Platform/Platform"]
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Platform/Platform/StaticBody2D"]
-position = Vector2(-2.5, -1.75)
+position = Vector2(-2.5, 6.75)
 shape = SubResource("RectangleShape2D_aerfg")
 
 [node name="MoveUp" type="AnimationPlayer" parent="Platform"]
