@@ -1,10 +1,13 @@
 extends Node
 
 @export var dash_unlocked := true
+@export var dash_stamina := false
 @export var wall_slide_jump_unlocked := true
+@export var wall_slide_jump_stamina := true
 @export var attack_unlocked := true
 @export var attack_2_unlocked := false
 @export var attack_3_unlocked := false
+@export var attack_stamina := true
 
 var in_water: bool
 

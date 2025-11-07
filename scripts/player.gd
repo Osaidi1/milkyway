@@ -14,14 +14,13 @@ extends CharacterBody2D
 @onready var hurtbox: Area2D = $Hurtbox
 @onready var hitbox: Area2D = $Hitbox
 @onready var hit_collision: CollisionShape2D = $Hitbox/CollisionShape2D
-@onready var footsteps: AudioStreamPlayer2D = $Footsteps
 
 @export var WALK_SPEED := 55
 @export var RUN_SPEED := 145
 @export var DASH_SPEED := 500
 @export var JUMP_VELOCITY : = -400
 @export var HEALTH := 100
-@export var SLIDE_FRICTION := 60
+@export var SLIDE_FRICTION := 40
 @export var WALL_JUMP_POWER := 100
 @export var BARS: CanvasLayer
 
@@ -42,6 +41,7 @@ var is_wall_jumping := false
 var is_hanging := false
 var fall_start_played := false
 var was_on_floor := false
+var can_control := true
 var dash_time: float
 var dash_duration := 0.35
 var looking_toward := 1
@@ -60,23 +60,26 @@ func _ready() -> void:
 	position = vars.player_spawn
 
 func _unhandled_input(event: InputEvent) -> void:
+	#Can't Control
+	if !can_control: return
+	
 	#Dash
-	if Input.is_action_just_pressed("dash") and !is_attacking and !is_dying and !is_hurting and !is_in_wall and !is_dashing and vars.dash_unlocked and !vars.in_water and BARS.stamina_bar.value >= 35:
+	if Input.is_action_just_pressed("dash") and !is_attacking and !is_dying and !is_hurting and !is_in_wall and !is_dashing and vars.dash_unlocked and !vars.in_water and BARS.stamina_bar.value > 25:
 		dash()
 	
 	#Jump
 	if is_on_floor() or !coyote.is_stopped() or is_in_wall:
-		if event.is_action_pressed("jump") and !is_attacking and !is_dying and !is_hurting and !is_jumping:
+		if event.is_action_pressed("jump") and !is_attacking and !is_dying and !is_hurting and !is_jumping and BARS.stamina_bar.value > 5:
 			jump()
 	
 	#Attack
-	if event.is_action_released("attack") and !is_jumping and !is_falling and !is_dying and !is_hurting and !is_in_wall and can_attack and vars.attack_unlocked and BARS.stamina_bar.value >= 20:
+	if event.is_action_released("attack") and !is_jumping and !is_falling and !is_dying and !is_hurting and !is_in_wall and can_attack and vars.attack_unlocked and BARS.stamina_bar.value > 30:
 		attack()
-	
-	if event.is_action_pressed("down"):
-		health_change(-30)
 
 func _physics_process(delta: float) -> void:
+	#Can't Control
+	if !can_control: return
+	
 	#Dying
 	if is_dying: return
 	
@@ -167,8 +170,6 @@ func _physics_process(delta: float) -> void:
 	
 	health_set()
 	
-	footstep()
-	
 	speed_set()
 	
 	anims()
@@ -205,6 +206,9 @@ func face_direction() -> void:
 		hitbox.scale.x = 1
 
 func anims() -> void:
+	#Can't Control
+	if !can_control: return
+	
 	if is_dying or is_hurting or is_attacking: return
 	if is_dashing:
 		animater.play("dash")
@@ -212,6 +216,8 @@ func anims() -> void:
 		animater.play("wall slide")
 	elif is_wall_jumping:
 		animater.play("wall jump")
+		await get_tree().create_timer(0.49).timeout
+		is_wall_jumping = false
 	elif is_jumping or velocity.y < 0:
 		animater.play("jump")
 	elif is_falling:
@@ -298,8 +304,6 @@ func health_change(diff) -> void:
 	var prev_health = HEALTH
 	HEALTH += diff
 	BARS.health_change(HEALTH)
-	print("here")
-	print(HEALTH)
 	if prev_health > HEALTH:
 		is_hurting = true
 		animater.play("hurt")
@@ -320,12 +324,6 @@ func die() -> void:
 func dash() -> void:
 	is_dashing = true
 	dash_time = 0.0
-
-func footstep():
-	if direction != 0:
-		footsteps.pitch_scale = rng.randf_range(0.7, 1.4)
-		footsteps.play()
-		await get_tree().create_timer(0.5).timeout
 
 func in_void(body: Node2D) -> void:
 	if body is Player:
