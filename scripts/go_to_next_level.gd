@@ -8,6 +8,6 @@ func _on_body_entered(body: Node2D) -> void:
 	if body is Player:
 		if level == 1:
 			transition.to_black()
-			await get_tree().create_timer(0.5).timeout
+			await get_tree().create_timer(1.5).timeout
 			transition.to_normal()
 			get_tree().change_scene_to_packed(LEVEL_2)

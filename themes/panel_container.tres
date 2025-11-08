@@ -1,0 +1,23 @@
+[gd_resource type="Theme" load_steps=2 format=3 uid="uid://dvbuxhwhms15i"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_tjumi"]
+content_margin_left = 10.0
+content_margin_top = 10.0
+content_margin_right = 10.0
+content_margin_bottom = 10.0
+bg_color = Color(1.44392e-06, 0.539348, 0.637873, 0.678431)
+border_width_left = 10
+border_width_top = 10
+border_width_right = 10
+border_width_bottom = 10
+border_color = Color(0.817521, 0.817521, 0.817521, 1)
+corner_radius_top_left = 30
+corner_radius_bottom_right = 30
+expand_margin_left = 100.0
+expand_margin_top = 45.0
+expand_margin_right = 100.0
+expand_margin_bottom = 45.0
+shadow_size = 10
+
+[resource]
+PanelContainer/styles/panel = SubResource("StyleBoxFlat_tjumi")

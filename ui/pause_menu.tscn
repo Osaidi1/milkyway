@@ -1,0 +1,158 @@
+[gd_scene load_steps=9 format=3 uid="uid://q3mje82145dc"]
+
+[ext_resource type="Shader" uid="uid://cwjhck3miveo6" path="res://shaders/pause_menu.gdshader" id="1_50142"]
+[ext_resource type="Script" uid="uid://b5xj3pjdp4nr0" path="res://scripts/pause_menu.gd" id="1_ejwgg"]
+[ext_resource type="Theme" uid="uid://dvbuxhwhms15i" path="res://themes/panel_container.tres" id="3_fob5h"]
+[ext_resource type="Theme" uid="uid://b1syo28andn4q" path="res://themes/buttons.tres" id="4_avurv"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_ejwgg"]
+shader = ExtResource("1_50142")
+shader_parameter/lod = 0.0
+
+[sub_resource type="Animation" id="Animation_ejwgg"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Blur:material:shader_parameter/lod")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [0.0]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Menu Background:modulate")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 0)]
+}
+
+[sub_resource type="Animation" id="Animation_50142"]
+resource_name = "blur"
+length = 0.3
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Blur:material:shader_parameter/lod")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.3),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [0.0, 0.564]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Menu Background:modulate")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.3),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 1)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_fob5h"]
+_data = {
+&"RESET": SubResource("Animation_ejwgg"),
+&"blur": SubResource("Animation_50142")
+}
+
+[node name="Pause Menu" type="Control"]
+process_mode = 3
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_ejwgg")
+
+[node name="Blur" type="ColorRect" parent="."]
+material = SubResource("ShaderMaterial_ejwgg")
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Menu Background" type="PanelContainer" parent="."]
+modulate = Color(1, 1, 1, 0)
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -95.0
+offset_top = -177.0
+offset_right = 90.0
+offset_bottom = 182.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("3_fob5h")
+
+[node name="Vertical Sort" type="VBoxContainer" parent="Menu Background"]
+layout_mode = 2
+theme_override_constants/separation = 51
+alignment = 1
+
+[node name="Resume" type="Button" parent="Menu Background/Vertical Sort"]
+layout_mode = 2
+size_flags_vertical = 4
+focus_neighbor_top = NodePath("../Quit")
+focus_neighbor_bottom = NodePath("../Restart")
+focus_next = NodePath("../Restart")
+focus_previous = NodePath("../Quit")
+theme = ExtResource("4_avurv")
+text = "Resume"
+
+[node name="Restart" type="Button" parent="Menu Background/Vertical Sort"]
+layout_mode = 2
+focus_neighbor_top = NodePath("../Resume")
+focus_neighbor_bottom = NodePath("../Main Menu")
+focus_next = NodePath("../Main Menu")
+focus_previous = NodePath("../Resume")
+theme = ExtResource("4_avurv")
+text = "Restart"
+
+[node name="Main Menu" type="Button" parent="Menu Background/Vertical Sort"]
+layout_mode = 2
+focus_neighbor_top = NodePath("../Restart")
+focus_neighbor_bottom = NodePath("../Quit")
+focus_next = NodePath("../Quit")
+focus_previous = NodePath("../Restart")
+theme = ExtResource("4_avurv")
+text = "Main Menu"
+
+[node name="Quit" type="Button" parent="Menu Background/Vertical Sort"]
+layout_mode = 2
+focus_neighbor_top = NodePath("../Main Menu")
+focus_neighbor_bottom = NodePath("../Resume")
+focus_next = NodePath("../Resume")
+focus_previous = NodePath("../Main Menu")
+theme = ExtResource("4_avurv")
+text = "Quit"
+
+[node name="Animater" type="AnimationPlayer" parent="."]
+libraries = {
+&"": SubResource("AnimationLibrary_fob5h")
+}
+
+[connection signal="pressed" from="Menu Background/Vertical Sort/Resume" to="." method="_on_resume_pressed"]
+[connection signal="pressed" from="Menu Background/Vertical Sort/Restart" to="." method="_on_restart_pressed"]
+[connection signal="pressed" from="Menu Background/Vertical Sort/Main Menu" to="." method="_on_main_menu_pressed"]
+[connection signal="pressed" from="Menu Background/Vertical Sort/Quit" to="." method="_on_quit_pressed"]

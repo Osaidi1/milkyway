@@ -3,6 +3,7 @@ extends CharacterBody2D
 
 @onready var animater: AnimatedSprite2D = $Animater
 @onready var collision: CollisionShape2D = $Collision
+@onready var camera: Camera2D = $Camera
 @onready var coyote: Timer = $coyote
 @onready var side: RayCast2D = $Animater/side
 @onready var side2: RayCast2D = $Animater/side2
@@ -14,6 +15,7 @@ extends CharacterBody2D
 @onready var hurtbox: Area2D = $Hurtbox
 @onready var hitbox: Area2D = $Hitbox
 @onready var hit_collision: CollisionShape2D = $Hitbox/CollisionShape2D
+@onready var enable_smooth: Timer = $"enable smooth"
 
 @export var WALK_SPEED := 55
 @export var RUN_SPEED := 145
@@ -22,6 +24,7 @@ extends CharacterBody2D
 @export var HEALTH := 100
 @export var SLIDE_FRICTION := 40
 @export var WALL_JUMP_POWER := 100
+@export var CAN_CONTROL := true
 @export var BARS: CanvasLayer
 
 enum attack_state {Att1, Att2, Att3}
@@ -41,7 +44,6 @@ var is_wall_jumping := false
 var is_hanging := false
 var fall_start_played := false
 var was_on_floor := false
-var can_control := true
 var dash_time: float
 var dash_duration := 0.35
 var looking_toward := 1
@@ -54,17 +56,23 @@ var att_state := 1
 var can_attack := true
 
 func _ready() -> void:
+	if vars.player_spawn == Vector2(-134, 658):
+		cutscenes.play("intro")
+	else:
+		cutscenes.play("RESET")
 	hit_collision.disabled = true
 	is_dying = false
 	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
 	position = vars.player_spawn
+	camera.position_smoothing_enabled = false
+	enable_smooth.start()
 
 func _unhandled_input(event: InputEvent) -> void:
 	#Can't Control
-	if !can_control: return
+	if !CAN_CONTROL: return
 	
 	#Dash
-	if Input.is_action_just_pressed("dash") and !is_attacking and !is_dying and !is_hurting and !is_in_wall and !is_dashing and vars.dash_unlocked and !vars.in_water and BARS.stamina_bar.value > 25:
+	if Input.is_action_just_pressed("dash") and !is_attacking and !is_dying and !is_hurting and !is_in_wall and !is_dashing and vars.dash_unlocked and BARS.stamina_bar.value > 25:
 		dash()
 	
 	#Jump
@@ -78,22 +86,23 @@ func _unhandled_input(event: InputEvent) -> void:
 
 func _physics_process(delta: float) -> void:
 	#Can't Control
-	if !can_control: return
+	if !CAN_CONTROL: return
 	
 	#Dying
 	if is_dying: return
+	
+	#In Water
+	if vars.in_water:
+		z_index = -5
+		velocity.y = velocity.y / 1.2
+	else:
+		z_index = 1
 	
 	# Add the gravity.
 	if not is_on_floor():
 		velocity += get_gravity() * delta
 	
 	#Set Variables
-	if vars.in_water:
-		z_index = -5
-		velocity.y *= 0.8
-		velocity.x *= 0.2
-	else:
-		z_index = 1
 	was_on_floor = is_on_floor()
 	if HEALTH <= 0:
 		die()
@@ -137,10 +146,14 @@ func _physics_process(delta: float) -> void:
 		velocity.x = move_toward(velocity.x, velocity.x, 0.2)
 	elif wall_jump_lock <= 0:
 		if direction:
-			if !is_dashing or !is_wall_jumping:
+			if !is_dashing or !is_wall_jumping or !vars.in_water:
 				velocity.x = direction * speed
 		else:
 			velocity.x = move_toward(velocity.x, 0, speed)
+	
+	#Movement in Water
+	if vars.in_water:
+		velocity.x = velocity.x / 8
 	
 	#Stop Moving if Attacking
 	if is_attacking:
@@ -207,7 +220,7 @@ func face_direction() -> void:
 
 func anims() -> void:
 	#Can't Control
-	if !can_control: return
+	if !CAN_CONTROL: return
 	
 	if is_dying or is_hurting or is_attacking: return
 	if is_dashing:
@@ -377,3 +390,6 @@ func apply_knockback(direction_for_knock: Vector2, force: float, knockback_durat
 	KNOCKBACK = direction_for_knock * force
 	KNOCKBACK.y *= 0
 	knockback_timer = knockback_duration
+
+func _enable_camera_smooth() -> void:
+	camera.position_smoothing_enabled = true

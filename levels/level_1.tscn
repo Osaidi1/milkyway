@@ -1,4 +1,4 @@
-[gd_scene load_steps=30 format=3 uid="uid://kvjcgugvhw8a"]
+[gd_scene load_steps=32 format=3 uid="uid://kvjcgugvhw8a"]
 
 [ext_resource type="PackedScene" uid="uid://3ffbqokcdysi" path="res://scenes/player.tscn" id="1_bswci"]
 [ext_resource type="PackedScene" uid="uid://br5apb2urv30b" path="res://levels/ground_level_1.tscn" id="2_rus8k"]
@@ -10,18 +10,191 @@
 [ext_resource type="Texture2D" uid="uid://e6unjsbm2xd7" path="res://assets/platform.png" id="6_5ot28"]
 [ext_resource type="PackedScene" uid="uid://bj2owap1qsxi0" path="res://scenes/respawn.tscn" id="7_pa8r4"]
 [ext_resource type="PackedScene" uid="uid://cid68hgymq6g1" path="res://levels/go_to_next_level.tscn" id="8_l53as"]
+[ext_resource type="PackedScene" uid="uid://q3mje82145dc" path="res://ui/pause_menu.tscn" id="11_5ot28"]
+
+[sub_resource type="Animation" id="Animation_aerfg"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Player/Camera:offset")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(0, -40)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Player/Camera:zoom")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(3, 3)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("All UIs/Cutscene Stuff/Up:position")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(0, -200)]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("All UIs/Cutscene Stuff/Down:position")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(0, 1080)]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("Player:CAN_CONTROL")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/5/type = "value"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("All UIs/Cutscene Stuff/1:visible_characters")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [0]
+}
+tracks/6/type = "value"
+tracks/6/imported = false
+tracks/6/enabled = true
+tracks/6/path = NodePath("All UIs/Cutscene Stuff/2:visible_characters")
+tracks/6/interp = 1
+tracks/6/loop_wrap = true
+tracks/6/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [0]
+}
 
 [sub_resource type="Animation" id="Animation_bswci"]
 resource_name = "intro"
 length = 30.0
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Player/Camera:offset")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 14.0333, 16.0333),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Vector2(0, -10), Vector2(0, -10), Vector2(0, -40)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Player/Camera:zoom")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 14.0333, 16.0333),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Vector2(6, 6), Vector2(6, 6), Vector2(3, 3)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("All UIs/Cutscene Stuff/Up:position")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 14.0333, 16.0333),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Vector2(0, 0), Vector2(0, 0), Vector2(0, -200)]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("All UIs/Cutscene Stuff/Down:position")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0, 14.0333, 16.0333),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Vector2(0, 880), Vector2(0, 880), Vector2(0, 1080)]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("Player:CAN_CONTROL")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0, 16.0333),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [false, true]
+}
+tracks/5/type = "value"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("All UIs/Cutscene Stuff/1:visible_characters")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0, 3.2, 3.2333, 3.26667, 3.3, 3.33333, 3.36667, 3.4, 3.43333, 3.46667, 3.5, 3.53003, 3.56667, 3.6, 3.63333, 3.66667, 3.7, 6.2, 6.2333, 6.26667, 6.3, 6.33333, 6.36667, 6.4, 6.43333, 6.46667, 6.5, 6.53333, 6.56667, 6.6, 6.63333, 6.66667, 6.7),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
+"update": 1,
+"values": [0, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 15, 14, 13, 12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1, 0]
+}
+tracks/6/type = "value"
+tracks/6/imported = false
+tracks/6/enabled = true
+tracks/6/path = NodePath("All UIs/Cutscene Stuff/2:visible_characters")
+tracks/6/interp = 1
+tracks/6/loop_wrap = true
+tracks/6/keys = {
+"times": PackedFloat32Array(0, 8.83333, 8.86663, 8.9, 8.93333, 8.96667, 9, 9.03333, 9.06667, 9.1, 9.13333, 9.16667, 9.2, 9.23333, 9.26667, 9.3, 9.33333, 9.36667, 9.4, 9.43333, 12.2, 12.2333, 12.2667, 12.3, 12.3333, 12.3667, 12.4, 12.4333, 12.4667, 12.5, 12.5333, 12.5667, 12.6, 12.6333, 12.6667, 12.7, 12.7333, 12.7667, 12.8),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
+"update": 1,
+"values": [0, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 18, 17, 16, 15, 14, 13, 12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1, 0]
+}
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_rus8k"]
 _data = {
+&"RESET": SubResource("Animation_aerfg"),
 &"intro": SubResource("Animation_bswci")
 }
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_aerfg"]
-size = Vector2(43, 18.5)
+size = Vector2(43, 26.5)
 
 [sub_resource type="Animation" id="Animation_5ot28"]
 length = 0.001
@@ -102,11 +275,9 @@ size = Vector2(1385, 80)
 
 [node name="Level1" type="Node2D"]
 
-[node name="World" parent="." instance=ExtResource("2_rus8k")]
+[node name="Environment" type="WorldEnvironment" parent="."]
 
-[node name="Player" parent="." node_paths=PackedStringArray("BARS") instance=ExtResource("1_bswci")]
-position = Vector2(-134, 657)
-BARS = NodePath("../PlayerDock")
+[node name="World" parent="." instance=ExtResource("2_rus8k")]
 
 [node name="Border" parent="." instance=ExtResource("3_rus8k")]
 position = Vector2(-337, 545)
@@ -116,8 +287,9 @@ libraries = {
 &"": SubResource("AnimationLibrary_rus8k")
 }
 
-[node name="PlayerDock" parent="." node_paths=PackedStringArray("player") instance=ExtResource("5_5ot28")]
-player = NodePath("../Player")
+[node name="Player" parent="." node_paths=PackedStringArray("BARS") instance=ExtResource("1_bswci")]
+position = Vector2(-134, 658)
+BARS = NodePath("../All UIs/PlayerDock")
 
 [node name="Platform" type="Node2D" parent="."]
 
@@ -134,7 +306,7 @@ texture = ExtResource("6_5ot28")
 [node name="StaticBody2D" type="StaticBody2D" parent="Platform/Platform"]
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Platform/Platform/StaticBody2D"]
-position = Vector2(-2.5, 6.75)
+position = Vector2(-2.5, 10.75)
 shape = SubResource("RectangleShape2D_aerfg")
 
 [node name="MoveUp" type="AnimationPlayer" parent="Platform"]
@@ -264,6 +436,7 @@ shape = SubResource("RectangleShape2D_6dial")
 position = Vector2(1233, 41)
 
 [node name="Respawn" parent="Respawns" instance=ExtResource("7_pa8r4")]
+position = Vector2(-3, -2)
 
 [node name="Respawn2" parent="Respawns" instance=ExtResource("7_pa8r4")]
 position = Vector2(2076, 218)
@@ -276,6 +449,73 @@ level = 1
 position = Vector2(-22.5, 533)
 shape = SubResource("RectangleShape2D_3sk1a")
 
+[node name="All UIs" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="PlayerDock" parent="All UIs" node_paths=PackedStringArray("player") instance=ExtResource("5_5ot28")]
+player = NodePath("../../Player")
+
+[node name="Cutscene Stuff" type="CanvasLayer" parent="All UIs"]
+
+[node name="Up" type="ColorRect" parent="All UIs/Cutscene Stuff"]
+anchors_preset = 10
+anchor_right = 1.0
+offset_top = -200.0
+grow_horizontal = 2
+color = Color(0, 0, 0, 1)
+
+[node name="Down" type="ColorRect" parent="All UIs/Cutscene Stuff"]
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_bottom = 200.0
+grow_horizontal = 2
+grow_vertical = 0
+color = Color(0, 0, 0, 1)
+
+[node name="1" type="RichTextLabel" parent="All UIs/Cutscene Stuff"]
+offset_right = 1920.0
+offset_bottom = 698.0
+size_flags_horizontal = 4
+size_flags_vertical = 4
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 20
+theme_override_constants/shadow_offset_y = 2
+theme_override_constants/shadow_offset_x = 2
+bbcode_enabled = true
+text = "[b][color=white][font=\"res://assets/monogram_font.ttf\"][font_size=150]No, It can't Be"
+horizontal_alignment = 1
+vertical_alignment = 1
+visible_characters = 0
+visible_ratio = 0.0
+
+[node name="2" type="RichTextLabel" parent="All UIs/Cutscene Stuff"]
+offset_right = 1920.0
+offset_bottom = 692.0
+size_flags_horizontal = 4
+size_flags_vertical = 4
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 20
+theme_override_constants/shadow_offset_y = 2
+theme_override_constants/shadow_offset_x = 2
+bbcode_enabled = true
+text = "[b][color=white][font=\"res://assets/monogram_font.ttf\"][font_size=150]I NEED to get Back"
+horizontal_alignment = 1
+vertical_alignment = 1
+visible_characters = 0
+visible_ratio = 0.0
+
+[node name="Pause Menu" type="CanvasLayer" parent="All UIs"]
+
+[node name="Pause Menu" parent="All UIs/Pause Menu" instance=ExtResource("11_5ot28")]
+
+[editable path="Player"]
+[editable path="Player/Hurtbox"]
+[editable path="Player/Hitbox"]
 [editable path="Dangers/Void"]
 [editable path="Dangers/Void2"]
 [editable path="Dangers/Void3"]
