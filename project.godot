@@ -11,7 +11,7 @@ config_version=5
 [application]
 
 config/name="milkyway"
-run/main_scene="res://levels/level_1.tscn"
+run/main_scene="uid://cyaap4j3d34qk"
 config/features=PackedStringArray("4.4", "Forward Plus")
 
 [autoload]

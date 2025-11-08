@@ -24,6 +24,7 @@ extends CharacterBody2D
 @export var HEALTH := 100
 @export var SLIDE_FRICTION := 40
 @export var WALL_JUMP_POWER := 100
+@export var SMOOTH_ENABLE_TIME := 2.0
 @export var CAN_CONTROL := true
 @export var BARS: CanvasLayer
 
@@ -64,7 +65,7 @@ func _ready() -> void:
 	is_dying = false
 	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
 	position = vars.player_spawn
-	camera.position_smoothing_enabled = false
+	enable_smooth.wait_time = SMOOTH_ENABLE_TIME
 	enable_smooth.start()
 
 func _unhandled_input(event: InputEvent) -> void:
@@ -332,6 +333,9 @@ func die() -> void:
 	collision.disabled = true
 	velocity.y = 0
 	await get_tree().create_timer(3).timeout
+	transition.to_black()
+	await get_tree().create_timer(1).timeout
+	transition.to_normal()
 	reload()
 
 func dash() -> void:
@@ -393,3 +397,6 @@ func apply_knockback(direction_for_knock: Vector2, force: float, knockback_durat
 
 func _enable_camera_smooth() -> void:
 	camera.position_smoothing_enabled = true
+
+func play_anim(anim_name: String):
+	animater.play(anim_name)

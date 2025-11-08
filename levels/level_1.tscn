@@ -1,4 +1,4 @@
-[gd_scene load_steps=32 format=3 uid="uid://kvjcgugvhw8a"]
+[gd_scene load_steps=33 format=3 uid="uid://kvjcgugvhw8a"]
 
 [ext_resource type="PackedScene" uid="uid://3ffbqokcdysi" path="res://scenes/player.tscn" id="1_bswci"]
 [ext_resource type="PackedScene" uid="uid://br5apb2urv30b" path="res://levels/ground_level_1.tscn" id="2_rus8k"]
@@ -11,6 +11,8 @@
 [ext_resource type="PackedScene" uid="uid://bj2owap1qsxi0" path="res://scenes/respawn.tscn" id="7_pa8r4"]
 [ext_resource type="PackedScene" uid="uid://cid68hgymq6g1" path="res://levels/go_to_next_level.tscn" id="8_l53as"]
 [ext_resource type="PackedScene" uid="uid://q3mje82145dc" path="res://ui/pause_menu.tscn" id="11_5ot28"]
+
+[sub_resource type="Environment" id="Environment_5ot28"]
 
 [sub_resource type="Animation" id="Animation_aerfg"]
 length = 0.001
@@ -276,6 +278,7 @@ size = Vector2(1385, 80)
 [node name="Level1" type="Node2D"]
 
 [node name="Environment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_5ot28")
 
 [node name="World" parent="." instance=ExtResource("2_rus8k")]
 
@@ -289,6 +292,7 @@ libraries = {
 
 [node name="Player" parent="." node_paths=PackedStringArray("BARS") instance=ExtResource("1_bswci")]
 position = Vector2(-134, 658)
+SMOOTH_ENABLE_TIME = 0.5
 BARS = NodePath("../All UIs/PlayerDock")
 
 [node name="Platform" type="Node2D" parent="."]

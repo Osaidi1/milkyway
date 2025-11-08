@@ -11,7 +11,9 @@ extends Node
 
 var in_water: bool
 
+var player_start := Vector2(-134, 658)
 var player_spawn := Vector2(-134, 658)
+
 var checkpoints = {}
 
 func activate_checkpoint(id):
