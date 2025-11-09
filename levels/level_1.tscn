@@ -196,7 +196,7 @@ _data = {
 }
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_aerfg"]
-size = Vector2(43, 26.5)
+size = Vector2(43, 33.5)
 
 [sub_resource type="Animation" id="Animation_5ot28"]
 length = 0.001
@@ -310,7 +310,7 @@ texture = ExtResource("6_5ot28")
 [node name="StaticBody2D" type="StaticBody2D" parent="Platform/Platform"]
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Platform/Platform/StaticBody2D"]
-position = Vector2(-2.5, 10.75)
+position = Vector2(-2.5, 14.25)
 shape = SubResource("RectangleShape2D_aerfg")
 
 [node name="MoveUp" type="AnimationPlayer" parent="Platform"]

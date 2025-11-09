@@ -14,7 +14,10 @@ func _on_check_body_entered(body: Node2D) -> void:
 	if body is Player:
 		collision.queue_free()
 		vars.activate_checkpoint(Number)
-		vars.player_spawn = spawn.global_position
+		if $"../../Go To Next Level".level == 1:
+			vars.player_spawn = spawn.global_position
+		elif $"../../Go To Next Level".level == 2:
+			vars.player_spawn_2 = spawn.global_position
 
 func activate_visuals():
 	collision.queue_free()

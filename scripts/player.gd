@@ -60,14 +60,17 @@ var last_delta := 0.0
 var can_attack := true
 
 func _ready() -> void:
-	if vars.player_spawn == Vector2(-134, 658):
+	if vars.player_spawn == Vector2(-134, 658) or vars.player_spawn_2 == Vector2(-198, -2997):
 		cutscenes.play("intro")
 	else:
 		cutscenes.play("RESET")
 	hit_collision.disabled = true
 	is_dying = false
 	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
-	position = vars.player_spawn
+	if $"../Go To Next Level".level == 1:
+		position = vars.player_spawn
+	elif $"../Go To Next Level".level == 2:
+		position = vars.player_spawn_2
 	enable_smooth.wait_time = SMOOTH_ENABLE_TIME
 	enable_smooth.start()
 
@@ -423,4 +426,4 @@ func _on_dash_unlock_body_entered(body: Node2D) -> void:
 		for i in range(15):
 			dash_tutorial.visible_characters -= 1
 			await get_tree().create_timer(0.05).timeout
-		
+		$"../DashUnlock/CollisionShape2D".queue_free()

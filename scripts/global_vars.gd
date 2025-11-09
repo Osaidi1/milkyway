@@ -11,8 +11,8 @@ extends Node
 
 var in_water: bool
 
-var player_start := Vector2(-134, 658)
 var player_spawn := Vector2(-134, 658)
+var player_spawn_2 := Vector2(-198, -2997)
 
 var checkpoints = {}
 
