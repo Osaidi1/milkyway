@@ -17,6 +17,7 @@ extends CharacterBody2D
 @onready var hit_collision: CollisionShape2D = $Hitbox/CollisionShape2D
 @onready var enable_smooth: Timer = $"enable smooth"
 @onready var hurt_screen: CanvasLayer = $"Red Hurtscreen/Hurt Screen"
+@onready var dash_tutorial: RichTextLabel = $"Dash Tutorial"
 
 @export var WALK_SPEED := 55
 @export var RUN_SPEED := 145
@@ -75,7 +76,7 @@ func _unhandled_input(event: InputEvent) -> void:
 	if !CAN_CONTROL: return
 	
 	#Dash
-	if Input.is_action_just_pressed("dash") and !is_attacking and !is_dying and !is_hurting and !is_in_wall and !is_dashing and vars.dash_unlocked and BARS.stamina_bar.value > 25:
+	if Input.is_action_just_pressed("dash") and !is_attacking and !is_dying and !is_hurting and !is_in_wall and !is_dashing and vars.dash_unlocked and BARS.stamina_bar.value > 40:
 		dash()
 	
 	#Jump
@@ -415,3 +416,11 @@ func play_wall_jump() -> void:
 func _on_dash_unlock_body_entered(body: Node2D) -> void:
 	if body is Player:
 		vars.dash_unlocked = true
+		for i in range(15):
+			dash_tutorial.visible_characters += 1
+			await get_tree().create_timer(0.05).timeout
+		await get_tree().create_timer(2).timeout
+		for i in range(15):
+			dash_tutorial.visible_characters -= 1
+			await get_tree().create_timer(0.05).timeout
+		

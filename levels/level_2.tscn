@@ -311,7 +311,7 @@ position = Vector2(-562, 2372)
 position = Vector2(2076, 218)
 
 [node name="DashUnlock" type="Area2D" parent="."]
-position = Vector2(671, 2413)
+position = Vector2(835, 2383)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="DashUnlock"]
 position = Vector2(0, -72)

@@ -1092,6 +1092,18 @@ offset_bottom = 1072.0
 grow_horizontal = 2
 texture = SubResource("GradientTexture2D_l71n6")
 
+[node name="Dash Tutorial" type="RichTextLabel" parent="."]
+offset_left = -46.0
+offset_top = -43.0
+offset_right = 51.0
+offset_bottom = -29.0
+bbcode_enabled = true
+text = "[b][color=black][font_size=16][font=\"res://assets/monogram_font.ttf\"]Press [img]assets/Q-Key.png[b][color=black][font_size=16][font=\"res://assets/monogram_font.ttf\"] to Dash"
+horizontal_alignment = 1
+vertical_alignment = 1
+visible_characters = 0
+visible_ratio = 0.0
+
 [connection signal="frame_changed" from="Animater" to="." method="_on_animater_frame_changed"]
 [connection signal="timeout" from="cooldown" to="." method="cooldown_end"]
 [connection signal="timeout" from="combo" to="." method="combo_end"]
