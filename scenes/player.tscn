@@ -1,4 +1,4 @@
-[gd_scene load_steps=148 format=3 uid="uid://3ffbqokcdysi"]
+[gd_scene load_steps=153 format=3 uid="uid://3ffbqokcdysi"]
 
 [ext_resource type="Script" uid="uid://c1yn0ljd2aaa1" path="res://scripts/player.gd" id="1_ur7pv"]
 [ext_resource type="Texture2D" uid="uid://b1icsdjy1kxp5" path="res://assets/player/male_hero-combo_1.png" id="2_4ni07"]
@@ -973,13 +973,34 @@ size = Vector2(12, 28)
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_a38lo"]
 size = Vector2(35, 37)
 
+[sub_resource type="Gradient" id="Gradient_i4ail"]
+offsets = PackedFloat32Array(0, 0.278884, 1)
+colors = PackedColorArray(1, 0, 0, 0.231373, 1, 0.396078, 0.396078, 0.0470588, 1, 1, 1, 0)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_i4ail"]
+gradient = SubResource("Gradient_i4ail")
+fill_to = Vector2(0, 1)
+metadata/_snap_count = 2
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_4ni07"]
+gradient = SubResource("Gradient_i4ail")
+fill_from = Vector2(1, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_a38lo"]
+gradient = SubResource("Gradient_i4ail")
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_l71n6"]
+gradient = SubResource("Gradient_i4ail")
+fill_from = Vector2(1, 1)
+fill_to = Vector2(0, 1)
+
 [node name="Player" type="CharacterBody2D"]
 z_index = 1
 script = ExtResource("1_ur7pv")
 
 [node name="Animater" type="AnimatedSprite2D" parent="."]
 sprite_frames = SubResource("SpriteFrames_y4r1p")
-animation = &"wall jump"
+animation = &"wall slide"
 autoplay = "idle"
 
 [node name="side" type="RayCast2D" parent="Animater"]
@@ -1037,6 +1058,39 @@ collision_mask = 128
 [node name="CollisionShape2D" parent="Hitbox" index="0"]
 position = Vector2(26.5, -2.5)
 shape = SubResource("RectangleShape2D_a38lo")
+
+[node name="Red Hurtscreen" type="Node2D" parent="."]
+
+[node name="Hurt Screen" type="CanvasLayer" parent="Red Hurtscreen"]
+visible = false
+
+[node name="Up" type="TextureRect" parent="Red Hurtscreen/Hurt Screen"]
+anchors_preset = 10
+anchor_right = 1.0
+offset_bottom = 1080.0
+grow_horizontal = 2
+texture = SubResource("GradientTexture2D_i4ail")
+
+[node name="Down" type="TextureRect" parent="Red Hurtscreen/Hurt Screen"]
+anchors_preset = 10
+anchor_right = 1.0
+offset_bottom = 1080.0
+grow_horizontal = 2
+texture = SubResource("GradientTexture2D_4ni07")
+
+[node name="Left" type="TextureRect" parent="Red Hurtscreen/Hurt Screen"]
+anchors_preset = 10
+anchor_right = 1.0
+offset_bottom = 1072.0
+grow_horizontal = 2
+texture = SubResource("GradientTexture2D_a38lo")
+
+[node name="Right" type="TextureRect" parent="Red Hurtscreen/Hurt Screen"]
+anchors_preset = 10
+anchor_right = 1.0
+offset_bottom = 1072.0
+grow_horizontal = 2
+texture = SubResource("GradientTexture2D_l71n6")
 
 [connection signal="frame_changed" from="Animater" to="." method="_on_animater_frame_changed"]
 [connection signal="timeout" from="cooldown" to="." method="cooldown_end"]

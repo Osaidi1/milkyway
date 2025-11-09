@@ -1,0 +1,226 @@
+[gd_scene load_steps=11 format=3 uid="uid://cyaap4j3d34qk"]
+
+[ext_resource type="PackedScene" uid="uid://bgaqa6q36dw88" path="res://levels/ground_level_2.tscn" id="1_mi4ay"]
+[ext_resource type="PackedScene" uid="uid://3ffbqokcdysi" path="res://scenes/player.tscn" id="2_pqqg8"]
+[ext_resource type="PackedScene" uid="uid://cid68hgymq6g1" path="res://levels/go_to_next_level.tscn" id="3_0srwa"]
+[ext_resource type="PackedScene" uid="uid://bj2owap1qsxi0" path="res://scenes/respawn.tscn" id="3_ilhis"]
+[ext_resource type="PackedScene" uid="uid://bq1kplm2r6k60" path="res://ui/player_dock.tscn" id="5_ep78u"]
+[ext_resource type="PackedScene" uid="uid://q3mje82145dc" path="res://ui/pause_menu.tscn" id="6_dfjjl"]
+
+[sub_resource type="Environment" id="Environment_mi4ay"]
+
+[sub_resource type="Animation" id="Animation_ep78u"]
+resource_name = "RESET"
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("../Player:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(-188, -2997)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("../Player:CAN_CONTROL")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("../Player/Animater:flip_h")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+
+[sub_resource type="Animation" id="Animation_ilhis"]
+resource_name = "intro"
+length = 5.0
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("../Player:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 3.96667, 4, 5),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 0,
+"values": [Vector2(-220, -2997), Vector2(-263.87, 2050), Vector2(-266, 2060), Vector2(-266, 2252)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("../Player:CAN_CONTROL")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 4.96667, 5),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 1,
+"values": [false, false, true]
+}
+tracks/2/type = "method"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("../Player")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 4, 4.03333, 5),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"values": [{
+"args": ["fall"],
+"method": &"play_anim"
+}, {
+"args": ["wall slide"],
+"method": &"play_anim"
+}, {
+"args": [-90],
+"method": &"health_change"
+}, {
+"args": [],
+"method": &"play_wall_jump"
+}]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("../Player/Animater:flip_h")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0, 5),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [true, false]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_dfjjl"]
+_data = {
+&"RESET": SubResource("Animation_ep78u"),
+&"intro": SubResource("Animation_ilhis")
+}
+
+[node name="Level2" type="Node2D"]
+
+[node name="Environment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_mi4ay")
+
+[node name="World" parent="." instance=ExtResource("1_mi4ay")]
+position = Vector2(0, 2455)
+
+[node name="Cutscenes" type="AnimationPlayer" parent="."]
+root_node = NodePath("../World")
+libraries = {
+&"": SubResource("AnimationLibrary_dfjjl")
+}
+
+[node name="Player" parent="." node_paths=PackedStringArray("BARS") instance=ExtResource("2_pqqg8")]
+position = Vector2(-188, -2997)
+SMOOTH_ENABLE_TIME = 10.0
+BARS = NodePath("../UIs/PlayerDock")
+
+[node name="Camera" parent="Player" index="2"]
+offset = Vector2(0, -50)
+limit_left = -465
+limit_bottom = 10000000
+position_smoothing_enabled = false
+
+[node name="Respawns" type="Node2D" parent="."]
+
+[node name="Respawn" parent="Respawns" instance=ExtResource("3_ilhis")]
+position = Vector2(720, 2417)
+
+[node name="Go To Next Level" parent="." instance=ExtResource("3_0srwa")]
+level = 2
+
+[node name="UIs" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="PlayerDock" parent="UIs" node_paths=PackedStringArray("player") instance=ExtResource("5_ep78u")]
+player = NodePath("../../Player")
+
+[node name="PauseMenu" type="CanvasLayer" parent="UIs"]
+
+[node name="Pause Menu" parent="UIs/PauseMenu" instance=ExtResource("6_dfjjl")]
+offset_left = 99.0
+offset_top = 2.0
+offset_right = 99.0
+offset_bottom = 2.0
+
+[node name="Cutscene Stuff" type="CanvasLayer" parent="UIs"]
+visible = false
+
+[node name="Up" type="ColorRect" parent="UIs/Cutscene Stuff"]
+anchors_preset = 10
+anchor_right = 1.0
+offset_top = -200.0
+grow_horizontal = 2
+color = Color(0, 0, 0, 1)
+
+[node name="Down" type="ColorRect" parent="UIs/Cutscene Stuff"]
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_bottom = 200.0
+grow_horizontal = 2
+grow_vertical = 0
+color = Color(0, 0, 0, 1)
+
+[node name="1" type="RichTextLabel" parent="UIs/Cutscene Stuff"]
+offset_right = 1920.0
+offset_bottom = 698.0
+size_flags_horizontal = 4
+size_flags_vertical = 4
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 20
+theme_override_constants/shadow_offset_y = 2
+theme_override_constants/shadow_offset_x = 2
+bbcode_enabled = true
+text = "[b][color=white][font=\"res://assets/monogram_font.ttf\"][font_size=150]No, It can't Be"
+horizontal_alignment = 1
+vertical_alignment = 1
+visible_characters = 0
+visible_ratio = 0.0
+
+[node name="2" type="RichTextLabel" parent="UIs/Cutscene Stuff"]
+offset_right = 1920.0
+offset_bottom = 692.0
+size_flags_horizontal = 4
+size_flags_vertical = 4
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 20
+theme_override_constants/shadow_offset_y = 2
+theme_override_constants/shadow_offset_x = 2
+bbcode_enabled = true
+text = "[b][color=white][font=\"res://assets/monogram_font.ttf\"][font_size=150]I NEED to get Back"
+horizontal_alignment = 1
+vertical_alignment = 1
+visible_characters = 0
+visible_ratio = 0.0
+
+[editable path="Player"]
+[editable path="Player/Hurtbox"]
+[editable path="Player/Hitbox"]
+[editable path="Respawns/Respawn"]

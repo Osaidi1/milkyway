@@ -16,6 +16,7 @@ extends CharacterBody2D
 @onready var hitbox: Area2D = $Hitbox
 @onready var hit_collision: CollisionShape2D = $Hitbox/CollisionShape2D
 @onready var enable_smooth: Timer = $"enable smooth"
+@onready var hurt_screen: CanvasLayer = $"Red Hurtscreen/Hurt Screen"
 
 @export var WALK_SPEED := 55
 @export var RUN_SPEED := 145
@@ -54,6 +55,7 @@ var wall_stay := 0.0
 var wall_stay_time := 0.05
 var knockback_timer := 0.0
 var att_state := 1
+var last_delta := 0.0
 var can_attack := true
 
 func _ready() -> void:
@@ -86,6 +88,8 @@ func _unhandled_input(event: InputEvent) -> void:
 		attack()
 
 func _physics_process(delta: float) -> void:
+	last_delta = delta
+	
 	#Can't Control
 	if !CAN_CONTROL: return
 	
@@ -318,7 +322,11 @@ func health_change(diff) -> void:
 	var prev_health = HEALTH
 	HEALTH += diff
 	BARS.health_change(HEALTH)
-	if prev_health > HEALTH:
+	if HEALTH < 20:
+		hurt_screen.visible = true
+	else:
+		hurt_screen.visible = false
+	if prev_health > HEALTH and !cutscenes.is_playing():
 		is_hurting = true
 		animater.play("hurt")
 		velocity.x = -looking_toward * 30
@@ -398,5 +406,12 @@ func apply_knockback(direction_for_knock: Vector2, force: float, knockback_durat
 func _enable_camera_smooth() -> void:
 	camera.position_smoothing_enabled = true
 
-func play_anim(anim_name: String):
+func play_anim(anim_name: String) -> void:
 	animater.play(anim_name)
+
+func play_wall_jump() -> void:
+	animater.play("wall jump")
+
+func _on_dash_unlock_body_entered(body: Node2D) -> void:
+	if body is Player:
+		vars.dash_unlocked = true
