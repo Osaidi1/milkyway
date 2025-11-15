@@ -60,17 +60,13 @@ var last_delta := 0.0
 var can_attack := true
 
 func _ready() -> void:
-	if vars.player_spawn == Vector2(-134, 658) or vars.player_spawn_2 == Vector2(-198, -2997):
+	if vars.player_spawn == Vector2(-134, 658):
 		cutscenes.play("intro")
 	else:
 		cutscenes.play("RESET")
 	hit_collision.disabled = true
 	is_dying = false
 	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
-	if $"../Go To Next Level".level == 1:
-		position = vars.player_spawn
-	elif $"../Go To Next Level".level == 2:
-		position = vars.player_spawn_2
 	enable_smooth.wait_time = SMOOTH_ENABLE_TIME
 	enable_smooth.start()
 
