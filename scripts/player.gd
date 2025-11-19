@@ -15,9 +15,10 @@ extends CharacterBody2D
 @onready var hurtbox: Area2D = $Hurtbox
 @onready var hitbox: Area2D = $Hitbox
 @onready var hit_collision: CollisionShape2D = $Hitbox/CollisionShape2D
-@onready var enable_smooth: Timer = $"enable smooth"
 @onready var hurt_screen: CanvasLayer = $"Red Hurtscreen/Hurt Screen"
 @onready var dash_tutorial: RichTextLabel = $"Dash Tutorial"
+@onready var wall_tutorial: RichTextLabel = $"Wall Tutorial"
+@onready var attack_tutorial: RichTextLabel = $"Attack Tutorial"
 
 @export var WALK_SPEED := 55
 @export var RUN_SPEED := 145
@@ -60,6 +61,8 @@ var last_delta := 0.0
 var can_attack := true
 
 func _ready() -> void:
+	camera.position_smoothing_enabled = false
+	global_position = vars.player_spawn
 	if vars.player_spawn == Vector2(-134, 658):
 		cutscenes.play("intro")
 	else:
@@ -67,8 +70,8 @@ func _ready() -> void:
 	hit_collision.disabled = true
 	is_dying = false
 	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
-	enable_smooth.wait_time = SMOOTH_ENABLE_TIME
-	enable_smooth.start()
+	await get_tree().create_timer(0.01).timeout
+	camera.position_smoothing_enabled = true
 
 func _unhandled_input(event: InputEvent) -> void:
 	#Can't Control
@@ -422,4 +425,28 @@ func _on_dash_unlock_body_entered(body: Node2D) -> void:
 		for i in range(15):
 			dash_tutorial.visible_characters -= 1
 			await get_tree().create_timer(0.05).timeout
+		$"../DashUnlock/CollisionShape2D".queue_free()
+
+func _on_wall_unlock_body_entered(body: Node2D) -> void:
+	if body is Player:
+		vars.wall_slide_jump_unlocked = true
+		for i in range(29):
+			wall_tutorial.visible_characters += 1
+			await get_tree().create_timer(0.02).timeout
+		await get_tree().create_timer(3).timeout
+		for i in range(29):
+			wall_tutorial.visible_characters -= 1
+			await get_tree().create_timer(0.02).timeout
+		$"../DashUnlock/CollisionShape2D".queue_free()
+
+func _on_attack_unlock_body_entered(body: Node2D) -> void:
+	if body is Player:
+		vars.attack_unlocked = true
+		for i in range(30):
+			attack_tutorial.visible_characters += 1
+			await get_tree().create_timer(0.02).timeout
+		await get_tree().create_timer(3).timeout
+		for i in range(30):
+			attack_tutorial.visible_characters -= 1
+			await get_tree().create_timer(0.02).timeout
 		$"../DashUnlock/CollisionShape2D".queue_free()

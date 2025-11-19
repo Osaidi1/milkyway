@@ -997,6 +997,15 @@ fill_to = Vector2(0, 1)
 [node name="Player" type="CharacterBody2D"]
 z_index = 1
 script = ExtResource("1_ur7pv")
+WALK_SPEED = null
+RUN_SPEED = null
+DASH_SPEED = null
+JUMP_VELOCITY = null
+HEALTH = null
+SLIDE_FRICTION = null
+WALL_JUMP_POWER = null
+SMOOTH_ENABLE_TIME = null
+CAN_CONTROL = null
 
 [node name="Animater" type="AnimatedSprite2D" parent="."]
 sprite_frames = SubResource("SpriteFrames_y4r1p")
@@ -1033,10 +1042,6 @@ wait_time = 0.05
 
 [node name="jump buffer" type="Timer" parent="."]
 wait_time = 0.08
-one_shot = true
-
-[node name="enable smooth" type="Timer" parent="."]
-wait_time = 0.5
 one_shot = true
 
 [node name="SwordSound2" type="AudioStreamPlayer2D" parent="."]
@@ -1104,10 +1109,33 @@ vertical_alignment = 1
 visible_characters = 0
 visible_ratio = 0.0
 
+[node name="Wall Tutorial" type="RichTextLabel" parent="."]
+offset_left = -92.46
+offset_top = -43.0
+offset_right = 90.54
+offset_bottom = -29.0
+bbcode_enabled = true
+text = "[b][color=black][font_size=16][font=\"res://assets/monogram_font.ttf\"]Pstt... Try to Climb the Wall"
+horizontal_alignment = 1
+vertical_alignment = 1
+visible_characters = 0
+visible_ratio = 0.0
+
+[node name="Attack Tutorial" type="RichTextLabel" parent="."]
+offset_left = -86.0
+offset_top = -44.0
+offset_right = 97.0
+offset_bottom = -30.0
+bbcode_enabled = true
+text = "[b][color=black][font_size=16][font=\"res://assets/monogram_font.ttf\"]Try Left Click for Attacking! "
+horizontal_alignment = 1
+vertical_alignment = 1
+visible_characters = 0
+visible_ratio = 0.0
+
 [connection signal="frame_changed" from="Animater" to="." method="_on_animater_frame_changed"]
 [connection signal="timeout" from="cooldown" to="." method="cooldown_end"]
 [connection signal="timeout" from="combo" to="." method="combo_end"]
-[connection signal="timeout" from="enable smooth" to="." method="_enable_camera_smooth"]
 [connection signal="area_entered" from="Hurtbox" to="." method="enemy_hit_entered"]
 [connection signal="area_entered" from="Hitbox" to="." method="enemy_hurt_entered"]
 

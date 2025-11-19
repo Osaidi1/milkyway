@@ -12,8 +12,7 @@ extends Node
 var in_water: bool
 var level := 1
 
-#var player_spawn := Vector2(-134, 658)
-var player_spawn := Vector2(-3382, 289)
+var player_spawn := Vector2(-135, 658)
 
 var checkpoints = {}
 

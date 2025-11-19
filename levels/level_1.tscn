@@ -103,38 +103,14 @@ tracks/6/keys = {
 tracks/7/type = "value"
 tracks/7/imported = false
 tracks/7/enabled = true
-tracks/7/path = NodePath("Player:position")
+tracks/7/path = NodePath("Player/Animater:flip_h")
 tracks/7/interp = 1
 tracks/7/loop_wrap = true
 tracks/7/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [Vector2(-134, 658)]
-}
-tracks/8/type = "value"
-tracks/8/imported = false
-tracks/8/enabled = true
-tracks/8/path = NodePath("Player/Animater:flip_h")
-tracks/8/interp = 1
-tracks/8/loop_wrap = true
-tracks/8/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
 "update": 1,
 "values": [false]
-}
-tracks/9/type = "value"
-tracks/9/imported = false
-tracks/9/enabled = true
-tracks/9/path = NodePath("Player/Camera:position_smoothing_enabled")
-tracks/9/interp = 1
-tracks/9/loop_wrap = true
-tracks/9/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 1,
-"values": [true]
 }
 
 [sub_resource type="Animation" id="Animation_bswci"]
@@ -299,6 +275,30 @@ tracks/4/keys = {
 "method": &"play_anim"
 }]
 }
+tracks/5/type = "value"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("All UIs/Cutscene Stuff/Up:position")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0, 4, 4.4),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Vector2(0, 0), Vector2(0, 0), Vector2(0, -200)]
+}
+tracks/6/type = "value"
+tracks/6/imported = false
+tracks/6/enabled = true
+tracks/6/path = NodePath("All UIs/Cutscene Stuff/Down:position")
+tracks/6/interp = 1
+tracks/6/loop_wrap = true
+tracks/6/keys = {
+"times": PackedFloat32Array(0, 4, 4.4),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Vector2(0, 880), Vector2(0, 880), Vector2(0, 1080)]
+}
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_rus8k"]
 _data = {
@@ -361,7 +361,7 @@ size = Vector2(96, 192)
 size = Vector2(96, 158)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_nmsli"]
-size = Vector2(360, 125)
+size = Vector2(311, 125)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_pa8r4"]
 size = Vector2(243, 269)
@@ -388,7 +388,7 @@ size = Vector2(86, 157.5)
 size = Vector2(69, 159.5)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_betor"]
-size = Vector2(360.5, 250.5)
+size = Vector2(308, 194.25)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_5ot28"]
 size = Vector2(20, 164)
@@ -412,12 +412,21 @@ libraries = {
 }
 
 [node name="Player" parent="." node_paths=PackedStringArray("BARS") instance=ExtResource("1_bswci")]
-position = Vector2(-134, 658)
+position = Vector2(3699.46, 1735)
+WALK_SPEED = 55
+RUN_SPEED = 145
+DASH_SPEED = 500
+JUMP_VELOCITY = -400
+HEALTH = 100
+SLIDE_FRICTION = 40
+WALL_JUMP_POWER = 100
 SMOOTH_ENABLE_TIME = 0.5
+CAN_CONTROL = true
 BARS = NodePath("../All UIs/PlayerDock")
 
 [node name="Camera" parent="Player" index="2"]
 limit_bottom = 10000000
+position_smoothing_enabled = false
 
 [node name="Platform" type="Node2D" parent="."]
 
@@ -508,6 +517,13 @@ position = Vector2(3296, 6617)
 [node name="Collision" parent="Dangers/Void9" index="0"]
 shape = SubResource("RectangleShape2D_nmsli")
 
+[node name="Void10" parent="Dangers" instance=ExtResource("5_pa8r4")]
+position = Vector2(4302, 6474)
+
+[node name="Collision" parent="Dangers/Void10" index="0"]
+position = Vector2(-5.5, 0)
+shape = SubResource("RectangleShape2D_nmsli")
+
 [node name="Waters" type="Node2D" parent="."]
 
 [node name="InWater" parent="Waters" instance=ExtResource("5_fcfvj")]
@@ -573,6 +589,13 @@ position = Vector2(4763, 6925)
 position = Vector2(51, -16)
 shape = SubResource("RectangleShape2D_betor")
 
+[node name="InWater10" parent="Waters" instance=ExtResource("5_fcfvj")]
+position = Vector2(5770, 6846)
+
+[node name="Collision" parent="Waters/InWater10" index="0"]
+position = Vector2(45, -44.125)
+shape = SubResource("RectangleShape2D_betor")
+
 [node name="Respawns" type="Node2D" parent="."]
 position = Vector2(1233, 41)
 
@@ -594,6 +617,20 @@ position = Vector2(4658, 6743)
 position = Vector2(0, -72)
 shape = SubResource("RectangleShape2D_5ot28")
 
+[node name="WallUnlock" type="Area2D" parent="."]
+position = Vector2(5247, 6729)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="WallUnlock"]
+position = Vector2(0, -72)
+shape = SubResource("RectangleShape2D_5ot28")
+
+[node name="AttackUnlock" type="Area2D" parent="."]
+position = Vector2(6853, 6248)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="AttackUnlock"]
+position = Vector2(0, -72)
+shape = SubResource("RectangleShape2D_5ot28")
+
 [node name="Go To Next Level" parent="." instance=ExtResource("8_l53as")]
 position = Vector2(4009, 421)
 
@@ -610,7 +647,6 @@ offset_bottom = 40.0
 player = NodePath("../../Player")
 
 [node name="Cutscene Stuff" type="CanvasLayer" parent="All UIs"]
-visible = false
 
 [node name="Up" type="ColorRect" parent="All UIs/Cutscene Stuff"]
 anchors_preset = 10
@@ -666,6 +702,8 @@ visible_ratio = 0.0
 [node name="Pause Menu" parent="All UIs/Pause Menu" instance=ExtResource("11_5ot28")]
 
 [connection signal="body_entered" from="DashUnlock" to="Player" method="_on_dash_unlock_body_entered"]
+[connection signal="body_entered" from="WallUnlock" to="Player" method="_on_wall_unlock_body_entered"]
+[connection signal="body_entered" from="AttackUnlock" to="Player" method="_on_attack_unlock_body_entered"]
 
 [editable path="Player"]
 [editable path="Player/Hurtbox"]
@@ -679,6 +717,7 @@ visible_ratio = 0.0
 [editable path="Dangers/Void7"]
 [editable path="Dangers/Void8"]
 [editable path="Dangers/Void9"]
+[editable path="Dangers/Void10"]
 [editable path="Waters/InWater"]
 [editable path="Waters/InWater2"]
 [editable path="Waters/InWater3"]
@@ -688,4 +727,5 @@ visible_ratio = 0.0
 [editable path="Waters/InWater7"]
 [editable path="Waters/InWater8"]
 [editable path="Waters/InWater9"]
+[editable path="Waters/InWater10"]
 [editable path="Go To Next Level"]
