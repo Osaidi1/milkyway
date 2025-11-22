@@ -10,7 +10,8 @@ config_version=5
 
 [application]
 
-config/name="milkyway"
+config/name="Scarf"
+config/version="1.0"
 run/main_scene="uid://bfwxhqcaypqqr"
 config/features=PackedStringArray("4.4", "Forward Plus")
 
@@ -18,6 +19,7 @@ config/features=PackedStringArray("4.4", "Forward Plus")
 
 vars="*res://scripts/global_vars.gd"
 transition="*res://ui/transition.tscn"
+music="*res://ui/music.tscn"
 
 [display]
 

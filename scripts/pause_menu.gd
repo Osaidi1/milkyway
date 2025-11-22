@@ -2,8 +2,6 @@ extends Control
 
 @onready var animater: AnimationPlayer = $Animater
 
-const MAIN_MENU = preload("res://ui/main_menu.tscn")
-
 func _ready() -> void:
 	animater.play("RESET")
 
@@ -35,7 +33,11 @@ func _on_restart_pressed() -> void:
 	transition.to_normal()
 
 func _on_main_menu_pressed() -> void:
-	get_tree().change_scene_to_packed(MAIN_MENU)
+	resume()
+	transition.to_black()
+	await get_tree().create_timer(1).timeout
+	get_tree().change_scene_to_file("res://ui/main_menu.tscn")
+	transition.to_normal()
 
 func _on_quit_pressed() -> void:
 	get_tree().quit()

@@ -994,18 +994,10 @@ gradient = SubResource("Gradient_i4ail")
 fill_from = Vector2(1, 1)
 fill_to = Vector2(0, 1)
 
-[node name="Player" type="CharacterBody2D"]
+[node name="Player" type="CharacterBody2D" node_paths=PackedStringArray("BARS")]
 z_index = 1
 script = ExtResource("1_ur7pv")
-WALK_SPEED = null
-RUN_SPEED = null
-DASH_SPEED = null
-JUMP_VELOCITY = null
-HEALTH = null
-SLIDE_FRICTION = null
-WALL_JUMP_POWER = null
-SMOOTH_ENABLE_TIME = null
-CAN_CONTROL = null
+BARS = NodePath("Red Hurtscreen/Hurt Screen")
 
 [node name="Animater" type="AnimatedSprite2D" parent="."]
 sprite_frames = SubResource("SpriteFrames_y4r1p")

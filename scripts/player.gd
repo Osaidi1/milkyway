@@ -108,7 +108,10 @@ func _physics_process(delta: float) -> void:
 	
 	# Add the gravity.
 	if not is_on_floor():
-		velocity += get_gravity() * delta
+		if velocity.y < 0:
+			velocity += get_gravity() * delta
+		else:
+			velocity += get_gravity() * delta * 1.02
 	
 	#Set Variables
 	was_on_floor = is_on_floor()
@@ -116,6 +119,7 @@ func _physics_process(delta: float) -> void:
 		die()
 	if is_falling:
 		is_jumping = false
+		
 	if is_on_wall():
 		is_wall_jumping = false
 		is_dashing = false
@@ -134,7 +138,6 @@ func _physics_process(delta: float) -> void:
 	#Falling
 	if !Input.is_action_just_pressed("jump") and velocity.y > 0:
 		is_falling = true
-		velocity.y *= 1.02
 	
 	#Jump Buffer
 	if Input.is_action_pressed("jump"):
@@ -228,19 +231,20 @@ func face_direction() -> void:
 
 func anims() -> void:
 	#Can't Control
-	if !CAN_CONTROL: return
+	if !CAN_CONTROL or cutscenes.is_playing(): return
 	
 	if is_dying or is_hurting or is_attacking: return
 	if is_dashing:
 		animater.play("dash")
 	elif is_in_wall:
 		animater.play("wall slide")
-	elif is_wall_jumping:
+	elif is_wall_jumping and !animater.is_playing():
 		animater.play("wall jump")
-		await get_tree().create_timer(0.49).timeout
-		is_wall_jumping = false
+		if !animater.is_playing():
+			is_wall_jumping = false
 	elif is_jumping or velocity.y < 0:
-		animater.play("jump")
+		if !is_wall_jumping:
+			animater.play("jump")
 	elif is_falling:
 		if !fall_start_played:
 			animater.play("fall start")
@@ -437,7 +441,7 @@ func _on_wall_unlock_body_entered(body: Node2D) -> void:
 		for i in range(29):
 			wall_tutorial.visible_characters -= 1
 			await get_tree().create_timer(0.02).timeout
-		$"../DashUnlock/CollisionShape2D".queue_free()
+		$"../WallUnlock/CollisionShape2D".queue_free()
 
 func _on_attack_unlock_body_entered(body: Node2D) -> void:
 	if body is Player:
@@ -449,4 +453,4 @@ func _on_attack_unlock_body_entered(body: Node2D) -> void:
 		for i in range(30):
 			attack_tutorial.visible_characters -= 1
 			await get_tree().create_timer(0.02).timeout
-		$"../DashUnlock/CollisionShape2D".queue_free()
+		$"../AttackUnlock/CollisionShape2D".queue_free()

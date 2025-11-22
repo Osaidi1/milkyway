@@ -1,9 +1,10 @@
-[gd_scene load_steps=9 format=3 uid="uid://q3mje82145dc"]
+[gd_scene load_steps=10 format=3 uid="uid://q3mje82145dc"]
 
 [ext_resource type="Shader" uid="uid://cwjhck3miveo6" path="res://shaders/pause_menu.gdshader" id="1_50142"]
 [ext_resource type="Script" uid="uid://b5xj3pjdp4nr0" path="res://scripts/pause_menu.gd" id="1_ejwgg"]
 [ext_resource type="Theme" uid="uid://dvbuxhwhms15i" path="res://themes/panel_container.tres" id="3_fob5h"]
-[ext_resource type="Theme" uid="uid://b1syo28andn4q" path="res://themes/buttons.tres" id="4_avurv"]
+[ext_resource type="Theme" uid="uid://b1syo28andn4q" path="res://themes/pausebuttons.tres" id="4_avurv"]
+[ext_resource type="FontFile" uid="uid://df62x3o6lbdp7" path="res://assets/monogram_font.ttf" id="5_npydk"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_ejwgg"]
 shader = ExtResource("1_50142")
@@ -35,10 +36,22 @@ tracks/1/keys = {
 "update": 0,
 "values": [Color(1, 1, 1, 0)]
 }
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Text:visible_characters")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [0]
+}
 
 [sub_resource type="Animation" id="Animation_50142"]
 resource_name = "blur"
-length = 0.3
+length = 0.4
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
@@ -46,7 +59,7 @@ tracks/0/path = NodePath("Blur:material:shader_parameter/lod")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.3),
+"times": PackedFloat32Array(0, 0.4),
 "transitions": PackedFloat32Array(1, 1),
 "update": 0,
 "values": [0.0, 0.564]
@@ -58,10 +71,22 @@ tracks/1/path = NodePath("Menu Background:modulate")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
-"times": PackedFloat32Array(0, 0.3),
+"times": PackedFloat32Array(0, 0.4),
 "transitions": PackedFloat32Array(1, 1),
 "update": 0,
 "values": [Color(1, 1, 1, 0), Color(1, 1, 1, 1)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Text:visible_characters")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 0.0333333, 0.0334333, 0.0666667, 0.1, 0.1001, 0.1002, 0.133333, 0.166667, 0.166767, 0.2, 0.2001, 0.233333, 0.266667, 0.3, 0.333333, 0.3667, 0.4),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
+"update": 1,
+"values": [0, 1, 0, 2, 3, 0, 0, 4, 5, 0, 6, 6, 7, 8, 9, 10, 11, 12]
 }
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_fob5h"]
@@ -130,6 +155,7 @@ theme = ExtResource("4_avurv")
 text = "Restart"
 
 [node name="Main Menu" type="Button" parent="Menu Background/Vertical Sort"]
+process_mode = 3
 layout_mode = 2
 focus_neighbor_top = NodePath("../Restart")
 focus_neighbor_bottom = NodePath("../Quit")
@@ -151,6 +177,23 @@ text = "Quit"
 libraries = {
 &"": SubResource("AnimationLibrary_fob5h")
 }
+
+[node name="Text" type="Label" parent="."]
+process_mode = 3
+layout_mode = 0
+offset_left = 775.0
+offset_top = 232.0
+offset_right = 1155.0
+offset_bottom = 306.0
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_constants/outline_size = 6
+theme_override_fonts/font = ExtResource("5_npydk")
+theme_override_font_sizes/font_size = 92
+text = "GAME PAUSED"
+horizontal_alignment = 1
+vertical_alignment = 1
+visible_characters = 0
+visible_ratio = 0.0
 
 [connection signal="pressed" from="Menu Background/Vertical Sort/Resume" to="." method="_on_resume_pressed"]
 [connection signal="pressed" from="Menu Background/Vertical Sort/Restart" to="." method="_on_restart_pressed"]

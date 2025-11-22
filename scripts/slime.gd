@@ -128,18 +128,22 @@ func player_not_in_range(body: Node2D) -> void:
 		is_wandering = true
 
 func attack(body: Node2D) -> void:
-	if body is Player:
+	if body is Player and !is_attacking:
 		is_attacking = true
-		while is_attacking:
-			animater.play(slime_color + " attack")
-			await get_tree().create_timer(0.4).timeout
-			hit_collision.disabled = false
-			await get_tree().create_timer(0.25).timeout
-			hit_collision.disabled = true
-			await get_tree().create_timer(0.35).timeout
-			await get_tree().create_timer(1.5).timeout
-			while velocity.y != 0 :
-				await get_tree().create_timer(0.1).timeout
+		animater.play(slime_color + " attack")
+		await get_tree().create_timer(0.4).timeout
+		hit_collision.disabled = false
+		await get_tree().create_timer(0.25).timeout
+		hit_collision.disabled = true
+		await get_tree().create_timer(0.35).timeout
+		await get_tree().create_timer(1.5).timeout
+		while velocity.y != 0 :
+			await get_tree().create_timer(0.1).timeout
+		is_attacking = false
+
+func attack_exit(body: Node2D) -> void:
+	if body is Player:
+		is_chasing = true
 
 func die() -> void:
 	is_dying = true
@@ -148,10 +152,6 @@ func die() -> void:
 	velocity.y = 0
 	await get_tree().create_timer(1).timeout
 	queue_free()
-
-func attack_exit(body: Node2D) -> void:
-	if body is Player:
-		is_attacking = false
 
 func health_set() -> void:
 	HEALTH = clamp(HEALTH, 0, 100)

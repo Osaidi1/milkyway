@@ -1,9 +1,8 @@
-[gd_scene load_steps=39 format=3 uid="uid://kvjcgugvhw8a"]
+[gd_scene load_steps=38 format=3 uid="uid://kvjcgugvhw8a"]
 
 [ext_resource type="PackedScene" uid="uid://3ffbqokcdysi" path="res://scenes/player.tscn" id="1_bswci"]
 [ext_resource type="PackedScene" uid="uid://br5apb2urv30b" path="res://levels/ground_level_1.tscn" id="2_rus8k"]
 [ext_resource type="PackedScene" uid="uid://c5g0jfg21np50" path="res://scenes/world border.tscn" id="3_rus8k"]
-[ext_resource type="PackedScene" uid="uid://bwkxij0pplxsx" path="res://scenes/spikes.tscn" id="4_nmsli"]
 [ext_resource type="PackedScene" uid="uid://bq1kplm2r6k60" path="res://ui/player_dock.tscn" id="5_5ot28"]
 [ext_resource type="Texture2D" uid="uid://bek14s3ujfecp" path="res://assets/Chain1.png" id="5_08mmt"]
 [ext_resource type="PackedScene" uid="uid://ct8dedup8174t" path="res://scenes/in_water.tscn" id="5_fcfvj"]
@@ -449,49 +448,6 @@ animation = &"wall jump"
 limit_bottom = 10000000
 position_smoothing_enabled = false
 
-[node name="Spikes" type="Node2D" parent="."]
-
-[node name="Spikes" parent="Spikes" instance=ExtResource("4_nmsli")]
-position = Vector2(7388, 6208)
-
-[node name="Spikes2" parent="Spikes" instance=ExtResource("4_nmsli")]
-position = Vector2(7268, 6092)
-rotation = 3.14159
-region_enabled = true
-region_rect = Rect2(0, 0, 8, 35.9754)
-
-[node name="Collision" parent="Spikes/Spikes2/Danger" index="0"]
-position = Vector2(-9.53674e-07, -9.61909)
-scale = Vector2(1, 0.558766)
-
-[node name="Spikes3" parent="Spikes" instance=ExtResource("4_nmsli")]
-position = Vector2(7388, 6009)
-
-[node name="Spikes4" parent="Spikes" instance=ExtResource("4_nmsli")]
-position = Vector2(7420, 5872)
-
-[node name="Spikes5" parent="Spikes" instance=ExtResource("4_nmsli")]
-z_index = -1
-position = Vector2(7420, 5808)
-
-[node name="Spikes6" parent="Spikes" instance=ExtResource("4_nmsli")]
-position = Vector2(7388, 5652)
-
-[node name="Spikes7" parent="Spikes" instance=ExtResource("4_nmsli")]
-z_index = -1
-position = Vector2(7268, 5926)
-scale = Vector2(-1, -1)
-
-[node name="Spikes8" parent="Spikes" instance=ExtResource("4_nmsli")]
-z_index = -1
-position = Vector2(7252, 5556)
-scale = Vector2(-1, -1)
-
-[node name="Spikes9" parent="Spikes" instance=ExtResource("4_nmsli")]
-z_index = -1
-position = Vector2(7268, 5501)
-scale = Vector2(-1, -1)
-
 [node name="Platform" type="Node2D" parent="."]
 
 [node name="Chain" type="Sprite2D" parent="Platform"]
@@ -587,13 +543,6 @@ position = Vector2(4302, 6474)
 [node name="Collision" parent="Dangers/Void10" index="0"]
 position = Vector2(-5.5, 0)
 shape = SubResource("RectangleShape2D_nmsli")
-
-[node name="Slimes" type="Node2D" parent="."]
-
-[node name="Slime" parent="Slimes" node_paths=PackedStringArray("player") instance=ExtResource("12_aerfg")]
-position = Vector2(7032, 6278)
-player = NodePath("../../Player")
-slime_color = "blue"
 
 [node name="Waters" type="Node2D" parent="."]
 
@@ -772,6 +721,11 @@ visible_ratio = 0.0
 
 [node name="Pause Menu" parent="All UIs/Pause Menu" instance=ExtResource("11_5ot28")]
 
+[node name="Slime" parent="." node_paths=PackedStringArray("player") instance=ExtResource("12_aerfg")]
+position = Vector2(7032, 6278)
+player = NodePath("../Player")
+slime_color = "blue"
+
 [connection signal="body_entered" from="DashUnlock" to="Player" method="_on_dash_unlock_body_entered"]
 [connection signal="body_entered" from="WallUnlock" to="Player" method="_on_wall_unlock_body_entered"]
 [connection signal="body_entered" from="AttackUnlock" to="Player" method="_on_attack_unlock_body_entered"]
@@ -779,7 +733,6 @@ visible_ratio = 0.0
 [editable path="Player"]
 [editable path="Player/Hurtbox"]
 [editable path="Player/Hitbox"]
-[editable path="Spikes/Spikes2"]
 [editable path="Dangers/Void"]
 [editable path="Dangers/Void2"]
 [editable path="Dangers/Void3"]
