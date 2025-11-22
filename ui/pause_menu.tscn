@@ -1,10 +1,11 @@
-[gd_scene load_steps=10 format=3 uid="uid://q3mje82145dc"]
+[gd_scene load_steps=11 format=3 uid="uid://q3mje82145dc"]
 
 [ext_resource type="Shader" uid="uid://cwjhck3miveo6" path="res://shaders/pause_menu.gdshader" id="1_50142"]
 [ext_resource type="Script" uid="uid://b5xj3pjdp4nr0" path="res://scripts/pause_menu.gd" id="1_ejwgg"]
 [ext_resource type="Theme" uid="uid://dvbuxhwhms15i" path="res://themes/panel_container.tres" id="3_fob5h"]
 [ext_resource type="Theme" uid="uid://b1syo28andn4q" path="res://themes/pausebuttons.tres" id="4_avurv"]
 [ext_resource type="FontFile" uid="uid://df62x3o6lbdp7" path="res://assets/monogram_font.ttf" id="5_npydk"]
+[ext_resource type="AudioStream" uid="uid://c7bp1e84tk7df" path="res://assets/buttons.mp3" id="6_6ap7o"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_ejwgg"]
 shader = ExtResource("1_50142")
@@ -195,7 +196,14 @@ vertical_alignment = 1
 visible_characters = 0
 visible_ratio = 0.0
 
+[node name="Sound Effect" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("6_6ap7o")
+
+[connection signal="focus_entered" from="Menu Background/Vertical Sort/Resume" to="." method="_on_resume_focus_entered"]
 [connection signal="pressed" from="Menu Background/Vertical Sort/Resume" to="." method="_on_resume_pressed"]
+[connection signal="focus_entered" from="Menu Background/Vertical Sort/Restart" to="." method="_on_restart_focus_entered"]
 [connection signal="pressed" from="Menu Background/Vertical Sort/Restart" to="." method="_on_restart_pressed"]
+[connection signal="focus_entered" from="Menu Background/Vertical Sort/Main Menu" to="." method="_on_main_menu_focus_entered"]
 [connection signal="pressed" from="Menu Background/Vertical Sort/Main Menu" to="." method="_on_main_menu_pressed"]
+[connection signal="focus_entered" from="Menu Background/Vertical Sort/Quit" to="." method="_on_quit_focus_entered"]
 [connection signal="pressed" from="Menu Background/Vertical Sort/Quit" to="." method="_on_quit_pressed"]

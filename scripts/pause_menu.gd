@@ -1,9 +1,13 @@
 extends Control
 
 @onready var animater: AnimationPlayer = $Animater
+@onready var sound: AudioStreamPlayer = $"Sound Effect"
 
 func _ready() -> void:
+	sound.volume_db = -80
+	$"Menu Background/Vertical Sort/Resume".grab_focus()
 	animater.play("RESET")
+	sound.volume_db = 0
 
 func _unhandled_input(event: InputEvent) -> void:
 	if event.is_action_pressed("pause"):
@@ -24,8 +28,10 @@ func pause() -> void:
 
 func _on_resume_pressed() -> void:
 	resume()
+	sound.play()
 
 func _on_restart_pressed() -> void:
+	sound.play()
 	resume()
 	transition.to_black()
 	await get_tree().create_timer(1.5).timeout
@@ -33,6 +39,7 @@ func _on_restart_pressed() -> void:
 	transition.to_normal()
 
 func _on_main_menu_pressed() -> void:
+	sound.play()
 	resume()
 	transition.to_black()
 	await get_tree().create_timer(1).timeout
@@ -40,4 +47,17 @@ func _on_main_menu_pressed() -> void:
 	transition.to_normal()
 
 func _on_quit_pressed() -> void:
+	sound.play()
 	get_tree().quit()
+
+func _on_resume_focus_entered() -> void:
+	sound.play()
+
+func _on_restart_focus_entered() -> void:
+	sound.play()
+
+func _on_main_menu_focus_entered() -> void:
+	sound.play()
+
+func _on_quit_focus_entered() -> void:
+	sound.play()

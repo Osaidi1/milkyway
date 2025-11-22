@@ -10,7 +10,7 @@
 [ext_resource type="PackedScene" uid="uid://vdr0wgxw2yfm" path="res://scenes/void.tscn" id="5_pa8r4"]
 [ext_resource type="Texture2D" uid="uid://e6unjsbm2xd7" path="res://assets/platform.png" id="6_5ot28"]
 [ext_resource type="PackedScene" uid="uid://bj2owap1qsxi0" path="res://scenes/respawn.tscn" id="7_pa8r4"]
-[ext_resource type="PackedScene" uid="uid://cid68hgymq6g1" path="res://levels/go_to_next_level.tscn" id="8_l53as"]
+[ext_resource type="PackedScene" uid="uid://cid68hgymq6g1" path="res://levels/game fin.tscn" id="8_l53as"]
 [ext_resource type="PackedScene" uid="uid://q3mje82145dc" path="res://ui/pause_menu.tscn" id="11_5ot28"]
 [ext_resource type="PackedScene" uid="uid://bth78kmorbqct" path="res://scenes/slime.tscn" id="12_aerfg"]
 
@@ -419,8 +419,8 @@ size = Vector2(308, 194.25)
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_5ot28"]
 size = Vector2(20, 164)
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_3sk1a"]
-size = Vector2(1385, 80)
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_vjtdm"]
+size = Vector2(420, 20)
 
 [node name="Level1" type="Node2D"]
 
@@ -491,6 +491,36 @@ scale = Vector2(-1, -1)
 z_index = -1
 position = Vector2(7268, 5501)
 scale = Vector2(-1, -1)
+
+[node name="Spikes10" parent="Spikes" instance=ExtResource("4_nmsli")]
+z_index = -1
+position = Vector2(8021, 5612)
+rotation = 1.5708
+
+[node name="Spikes12" parent="Spikes" instance=ExtResource("4_nmsli")]
+z_index = -1
+position = Vector2(8497, 5292)
+rotation = 1.5708
+
+[node name="Spikes13" parent="Spikes" instance=ExtResource("4_nmsli")]
+z_index = -1
+position = Vector2(8592, 5292)
+rotation = 1.5708
+
+[node name="Spikes15" parent="Spikes" instance=ExtResource("4_nmsli")]
+z_index = -1
+position = Vector2(8690, 5292)
+rotation = 1.5708
+
+[node name="Spikes14" parent="Spikes" instance=ExtResource("4_nmsli")]
+z_index = -1
+position = Vector2(8784, 5292)
+rotation = 1.5708
+
+[node name="Spikes11" parent="Spikes" instance=ExtResource("4_nmsli")]
+z_index = -1
+position = Vector2(8085, 5613)
+rotation = 1.5708
 
 [node name="Platform" type="Node2D" parent="."]
 
@@ -594,6 +624,10 @@ shape = SubResource("RectangleShape2D_nmsli")
 position = Vector2(7032, 6278)
 player = NodePath("../../Player")
 slime_color = "blue"
+
+[node name="Slime2" parent="Slimes" node_paths=PackedStringArray("player") instance=ExtResource("12_aerfg")]
+position = Vector2(7890, 5622)
+player = NodePath("../../Player")
 
 [node name="Waters" type="Node2D" parent="."]
 
@@ -702,11 +736,11 @@ position = Vector2(6853, 6248)
 position = Vector2(0, -72)
 shape = SubResource("RectangleShape2D_5ot28")
 
-[node name="Go To Next Level" parent="." instance=ExtResource("8_l53as")]
-position = Vector2(4009, 421)
+[node name="Game Fin" parent="." instance=ExtResource("8_l53as")]
+position = Vector2(9324, 5337)
 
-[node name="Collision" parent="Go To Next Level" index="0"]
-shape = SubResource("RectangleShape2D_3sk1a")
+[node name="Collision" parent="Game Fin" index="0"]
+shape = SubResource("RectangleShape2D_vjtdm")
 
 [node name="All UIs" type="Control" parent="."]
 layout_mode = 3
@@ -800,4 +834,4 @@ visible_ratio = 0.0
 [editable path="Waters/InWater8"]
 [editable path="Waters/InWater9"]
 [editable path="Waters/InWater10"]
-[editable path="Go To Next Level"]
+[editable path="Game Fin"]
