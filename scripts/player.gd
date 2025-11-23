@@ -236,12 +236,12 @@ func anims() -> void:
 	if is_dying or is_hurting or is_attacking: return
 	if is_dashing:
 		animater.play("dash")
+	elif is_wall_jumping:
+		animater.play("wall jump")
+		await get_tree().create_timer(0.49).timeout
+		is_wall_jumping = false
 	elif is_in_wall:
 		animater.play("wall slide")
-	elif is_wall_jumping and !animater.is_playing():
-		animater.play("wall jump")
-		if !animater.is_playing():
-			is_wall_jumping = false
 	elif is_jumping or velocity.y < 0:
 		if !is_wall_jumping:
 			animater.play("jump")
@@ -434,11 +434,11 @@ func _on_dash_unlock_body_entered(body: Node2D) -> void:
 func _on_wall_unlock_body_entered(body: Node2D) -> void:
 	if body is Player:
 		vars.wall_slide_jump_unlocked = true
-		for i in range(29):
+		for i in range(21):
 			wall_tutorial.visible_characters += 1
 			await get_tree().create_timer(0.02).timeout
 		await get_tree().create_timer(3).timeout
-		for i in range(29):
+		for i in range(21):
 			wall_tutorial.visible_characters -= 1
 			await get_tree().create_timer(0.02).timeout
 		$"../WallUnlock/CollisionShape2D".queue_free()
@@ -446,11 +446,11 @@ func _on_wall_unlock_body_entered(body: Node2D) -> void:
 func _on_attack_unlock_body_entered(body: Node2D) -> void:
 	if body is Player:
 		vars.attack_unlocked = true
-		for i in range(30):
+		for i in range(26):
 			attack_tutorial.visible_characters += 1
 			await get_tree().create_timer(0.02).timeout
 		await get_tree().create_timer(3).timeout
-		for i in range(30):
+		for i in range(26):
 			attack_tutorial.visible_characters -= 1
 			await get_tree().create_timer(0.02).timeout
-		$"../AttackUnlock/CollisionShape2D".queue_free()
+		$"../AttackUnlock/CollisionShape2D".disabled = true
