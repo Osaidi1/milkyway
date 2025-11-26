@@ -11,7 +11,7 @@ extends CharacterBody2D
 @onready var cooldown: Timer = $cooldown
 @onready var jump_buffer: Timer = $"jump buffer"
 @onready var cutscenes: AnimationPlayer = $"../Cutscenes"
-@onready var sword_sound_2: AudioStreamPlayer2D = $SwordSound2
+@onready var sword_sound: AudioStreamPlayer2D = $SwordSound
 @onready var hurtbox: Area2D = $Hurtbox
 @onready var hitbox: Area2D = $Hitbox
 @onready var hit_collision: CollisionShape2D = $Hitbox/CollisionShape2D
@@ -62,6 +62,7 @@ var can_attack := true
 
 func _ready() -> void:
 	camera.position_smoothing_enabled = false
+	transition.to_normal()
 	global_position = vars.player_spawn
 	if vars.player_spawn == Vector2(-134, 658):
 		cutscenes.play("intro")
@@ -70,7 +71,7 @@ func _ready() -> void:
 	hit_collision.disabled = true
 	is_dying = false
 	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
-	await get_tree().create_timer(0.01).timeout
+	await get_tree().create_timer(SMOOTH_ENABLE_TIME).timeout
 	camera.position_smoothing_enabled = true
 
 func _unhandled_input(event: InputEvent) -> void:
@@ -78,7 +79,7 @@ func _unhandled_input(event: InputEvent) -> void:
 	if !CAN_CONTROL: return
 	
 	#Dash
-	if Input.is_action_just_pressed("dash") and !is_attacking and !is_dying and !is_hurting and !is_in_wall and !is_dashing and vars.dash_unlocked and BARS.stamina_bar.value > 40:
+	if Input.is_action_just_pressed("dash") and !is_attacking and !is_dying and !is_hurting and !is_in_wall and !is_dashing and vars.dash_unlocked and BARS.stamina_bar.value > 25:
 		dash()
 	
 	#Jump
@@ -87,7 +88,7 @@ func _unhandled_input(event: InputEvent) -> void:
 			jump()
 	
 	#Attack
-	if event.is_action_released("attack") and !is_jumping and !is_falling and !is_dying and !is_hurting and !is_in_wall and can_attack and vars.attack_unlocked and BARS.stamina_bar.value > 30:
+	if event.is_action_released("attack") and !is_jumping and !is_falling and !is_dying and !is_hurting and !is_in_wall and can_attack and vars.attack_unlocked and BARS.stamina_bar.value > 20:
 		attack()
 
 func _physics_process(delta: float) -> void:
@@ -263,6 +264,8 @@ func attack() -> void:
 	if is_attacking: return
 	if att_state == 1:
 		is_attacking = true
+		sword_sound.pitch_scale = rng.randf_range(0.9, 1.2)
+		sword_sound.play()
 		animater.play("attack 1")
 		hit_collision.disabled = false
 		await get_tree().create_timer(0.27).timeout
@@ -280,8 +283,8 @@ func attack() -> void:
 	elif att_state == 2:
 		is_attacking = true
 		animater.play("attack 2")
-		sword_sound_2.pitch_scale = rng.randf_range(0.9, 1.2)
-		sword_sound_2.play()
+		sword_sound.pitch_scale = rng.randf_range(0.9, 1.2)
+		sword_sound.play()
 		await get_tree().create_timer(0.25).timeout
 		hit_collision.disabled = false
 		await get_tree().create_timer(0.25).timeout
@@ -350,7 +353,6 @@ func die() -> void:
 	await get_tree().create_timer(3).timeout
 	transition.to_black()
 	await get_tree().create_timer(1).timeout
-	transition.to_normal()
 	reload()
 
 func dash() -> void:
@@ -424,11 +426,11 @@ func _on_dash_unlock_body_entered(body: Node2D) -> void:
 		vars.dash_unlocked = true
 		for i in range(15):
 			dash_tutorial.visible_characters += 1
-			await get_tree().create_timer(0.05).timeout
+			await get_tree().create_timer(0.02).timeout
 		await get_tree().create_timer(2).timeout
 		for i in range(15):
 			dash_tutorial.visible_characters -= 1
-			await get_tree().create_timer(0.05).timeout
+			await get_tree().create_timer(0.02).timeout
 		$"../DashUnlock/CollisionShape2D".queue_free()
 
 func _on_wall_unlock_body_entered(body: Node2D) -> void:
@@ -446,11 +448,15 @@ func _on_wall_unlock_body_entered(body: Node2D) -> void:
 func _on_attack_unlock_body_entered(body: Node2D) -> void:
 	if body is Player:
 		vars.attack_unlocked = true
-		for i in range(26):
+		for i in range(17):
 			attack_tutorial.visible_characters += 1
 			await get_tree().create_timer(0.02).timeout
 		await get_tree().create_timer(3).timeout
-		for i in range(26):
+		for i in range(17):
 			attack_tutorial.visible_characters -= 1
 			await get_tree().create_timer(0.02).timeout
 		$"../AttackUnlock/CollisionShape2D".disabled = true
+
+func _on_area_2d_body_entered(body: Node2D) -> void:
+	if body is Player and body.is_on_floor():
+		body.position.x -= 50

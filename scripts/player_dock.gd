@@ -31,9 +31,9 @@ func _process(delta: float) -> void:
 			1:
 				stamina_bar.value -= 10
 			2:
-				stamina_bar.value -= 20
+				stamina_bar.value -= 15
 			3:
-				stamina_bar.value -= 30
+				stamina_bar.value -= 20
 		attack_stamina_taken = true
 		stamina_bar.value = clamp(stamina_bar.value, 0, 100)
 		is_regening = false
@@ -41,7 +41,7 @@ func _process(delta: float) -> void:
 	if player.is_attacking == false:
 		attack_stamina_taken = false
 	if player.is_dashing and !dash_stamina_taken and vars.dash_stamina:
-		stamina_bar.value -= 40
+		stamina_bar.value -= 25
 		stamina_bar.value = clamp(stamina_bar.value, 0, 100)
 		dash_stamina_taken = true
 		is_regening = false

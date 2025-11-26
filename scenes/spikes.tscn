@@ -12,3 +12,5 @@ position = Vector2(-3.83997, 22.0444)
 
 [node name="Collision" type="CollisionPolygon2D" parent="Danger"]
 polygon = PackedVector2Array(1.83997, 9.95559, -0.160027, 0.955585, -0.160027, -7.04441, -0.160027, -46.0444, 2.83997, -52.0444, 5.83997, -53.0444, 7.83997, -53.0444, 7.83997, 9.95559)
+
+[connection signal="body_entered" from="Danger" to="." method="_on_danger_body_entered"]

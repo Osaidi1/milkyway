@@ -1036,7 +1036,7 @@ wait_time = 0.05
 wait_time = 0.08
 one_shot = true
 
-[node name="SwordSound2" type="AudioStreamPlayer2D" parent="."]
+[node name="SwordSound" type="AudioStreamPlayer2D" parent="."]
 stream = ExtResource("19_4r5pv")
 volume_db = 14.856
 attenuation = 0.870551
@@ -1092,36 +1092,30 @@ texture = SubResource("GradientTexture2D_l71n6")
 [node name="Dash Tutorial" type="RichTextLabel" parent="."]
 offset_left = -46.0
 offset_top = -43.0
-offset_right = 51.0
-offset_bottom = -29.0
+offset_right = 95.0
+offset_bottom = 8.0
 bbcode_enabled = true
 text = "[b][color=black][font_size=16][font=\"res://assets/monogram_font.ttf\"]Press [img]assets/Q-Key.png[b][color=black][font_size=16][font=\"res://assets/monogram_font.ttf\"] to Dash"
-horizontal_alignment = 1
-vertical_alignment = 1
 visible_characters = 0
 visible_ratio = 0.0
 
 [node name="Wall Tutorial" type="RichTextLabel" parent="."]
-offset_left = -92.46
+offset_left = -67.0
 offset_top = -43.0
-offset_right = 90.54
-offset_bottom = -29.0
+offset_right = 166.0
+offset_bottom = 8.0
 bbcode_enabled = true
 text = "[b][color=black][font_size=16][font=\"res://assets/monogram_font.ttf\"]Pstt... Try to Climb the Wall"
-horizontal_alignment = 1
-vertical_alignment = 1
 visible_characters = 0
 visible_ratio = 0.0
 
 [node name="Attack Tutorial" type="RichTextLabel" parent="."]
-offset_left = -86.0
+offset_left = -55.0
 offset_top = -44.0
-offset_right = 97.0
-offset_bottom = -30.0
+offset_right = 136.0
+offset_bottom = 6.0
 bbcode_enabled = true
-text = "[b][color=black][font_size=16][font=\"res://assets/monogram_font.ttf\"]Try Left Click for Attacking! "
-horizontal_alignment = 1
-vertical_alignment = 1
+text = "[b][color=black][font_size=16][font=\"res://assets/monogram_font.ttf\"]Press [img]assets/E-Key.png[b][color=black][font_size=16][font=\"res://assets/monogram_font.ttf\"] to Attack"
 visible_characters = 0
 visible_ratio = 0.0
 

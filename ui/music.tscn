@@ -3,6 +3,7 @@
 [ext_resource type="AudioStream" uid="uid://bvv5atlq2moui" path="res://assets/Music 1.ogg" id="2_7ydlp"]
 
 [node name="Music" type="Node2D"]
+process_mode = 3
 
 [node name="Music1" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("2_7ydlp")

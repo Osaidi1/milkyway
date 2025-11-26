@@ -69,8 +69,6 @@ func _physics_process(delta: float) -> void:
 		var direction = (player_pos - position).normalized()
 		if !is_attacking:
 			velocity.x = direction.x * SPEED
-		elif is_attacking:
-			velocity.x = 0
 		
 		#Turn while chase
 		dir = sign(direction.x)
@@ -136,7 +134,7 @@ func attack(body: Node2D) -> void:
 		await get_tree().create_timer(0.25).timeout
 		hit_collision.disabled = true
 		await get_tree().create_timer(0.35).timeout
-		await get_tree().create_timer(1.5).timeout
+		await get_tree().create_timer(0.5).timeout
 		while velocity.y != 0 :
 			await get_tree().create_timer(0.1).timeout
 		is_attacking = false
@@ -167,7 +165,7 @@ func health_change(diff) -> void:
 
 func player_hurt_entered(area: Area2D) -> void:
 	if area.get_parent() is Player and player and !is_hurting:
-		player.health_change(-20)
+		player.health_change(-10)
 		var knockback_direction = (area.global_position - global_position).normalized()
 		player.apply_knockback(knockback_direction, 150, 0.2)
 

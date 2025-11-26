@@ -1,4 +1,4 @@
-[gd_scene load_steps=41 format=3 uid="uid://kvjcgugvhw8a"]
+[gd_scene load_steps=42 format=3 uid="uid://kvjcgugvhw8a"]
 
 [ext_resource type="PackedScene" uid="uid://3ffbqokcdysi" path="res://scenes/player.tscn" id="1_bswci"]
 [ext_resource type="PackedScene" uid="uid://br5apb2urv30b" path="res://levels/ground_level_1.tscn" id="2_rus8k"]
@@ -11,6 +11,7 @@
 [ext_resource type="Texture2D" uid="uid://e6unjsbm2xd7" path="res://assets/platform.png" id="6_5ot28"]
 [ext_resource type="PackedScene" uid="uid://bj2owap1qsxi0" path="res://scenes/respawn.tscn" id="7_pa8r4"]
 [ext_resource type="PackedScene" uid="uid://cid68hgymq6g1" path="res://levels/game fin.tscn" id="8_l53as"]
+[ext_resource type="Script" uid="uid://ba0bv51e11n14" path="res://scripts/respawn.gd" id="10_vjtdm"]
 [ext_resource type="PackedScene" uid="uid://q3mje82145dc" path="res://ui/pause_menu.tscn" id="11_5ot28"]
 [ext_resource type="Script" uid="uid://kc2shedf00nj" path="res://scripts/2_nd_cutscene.gd" id="11_betor"]
 [ext_resource type="PackedScene" uid="uid://bth78kmorbqct" path="res://scenes/slime.tscn" id="12_aerfg"]
@@ -126,6 +127,18 @@ tracks/8/keys = {
 "transitions": PackedFloat32Array(1),
 "update": 0,
 "values": [Vector2(0, 0)]
+}
+tracks/9/type = "value"
+tracks/9/imported = false
+tracks/9/enabled = true
+tracks/9/path = NodePath("World/Parallax1/Mountains/Sprite2D:visible")
+tracks/9/interp = 1
+tracks/9/loop_wrap = true
+tracks/9/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
 }
 
 [sub_resource type="Animation" id="Animation_bswci"]
@@ -326,6 +339,18 @@ tracks/6/keys = {
 "update": 0,
 "values": [Vector2(0, 880), Vector2(0, 880), Vector2(0, 1080)]
 }
+tracks/7/type = "value"
+tracks/7/imported = false
+tracks/7/enabled = true
+tracks/7/path = NodePath("World/Parallax1/Mountains/Sprite2D:visible")
+tracks/7/interp = 1
+tracks/7/loop_wrap = true
+tracks/7/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_rus8k"]
 _data = {
@@ -336,6 +361,9 @@ _data = {
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_aerfg"]
 size = Vector2(43, 33.5)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_lrvbd"]
+size = Vector2(43, 5)
 
 [sub_resource type="Animation" id="Animation_5ot28"]
 length = 0.001
@@ -423,16 +451,10 @@ size = Vector2(346, 20)
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_5ot28"]
 size = Vector2(20, 164)
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_vjtdm"]
-size = Vector2(420, 20)
-
 [node name="Level1" type="Node2D"]
 
 [node name="Environment" type="WorldEnvironment" parent="."]
 environment = SubResource("Environment_5ot28")
-
-[node name="World" parent="." instance=ExtResource("2_rus8k")]
-position = Vector2(-30, 18)
 
 [node name="Border" parent="." instance=ExtResource("3_rus8k")]
 position = Vector2(-337, 545)
@@ -442,9 +464,12 @@ libraries = {
 &"": SubResource("AnimationLibrary_rus8k")
 }
 
+[node name="World" parent="." instance=ExtResource("2_rus8k")]
+position = Vector2(-30, 18)
+
 [node name="Player" parent="." node_paths=PackedStringArray("BARS") instance=ExtResource("1_bswci")]
-position = Vector2(-125, 523)
-SMOOTH_ENABLE_TIME = 0.5
+position = Vector2(47, 691)
+SMOOTH_ENABLE_TIME = 0.1
 BARS = NodePath("../All UIs/PlayerDock")
 
 [node name="Animater" parent="Player" index="0"]
@@ -454,11 +479,15 @@ animation = &"wall jump"
 limit_bottom = 10000000
 position_smoothing_enabled = false
 
+[node name="Dash Tutorial" parent="Player" index="11"]
+metadata/_edit_use_anchors_ = true
+
 [node name="Wall Tutorial" parent="Player" index="12"]
 text = "[b][color=black][font_size=16][font=\"res://assets/monogram_font.ttf\"]Try to Climb the Wall"
+metadata/_edit_use_anchors_ = true
 
 [node name="Attack Tutorial" parent="Player" index="13"]
-text = "[b][color=black][font_size=16][font=\"res://assets/monogram_font.ttf\"]Try Left Click to Attack! "
+metadata/_edit_use_anchors_ = true
 
 [node name="Spikes" type="Node2D" parent="."]
 
@@ -490,7 +519,7 @@ position = Vector2(7388, 5652)
 
 [node name="Spikes7" parent="Spikes" instance=ExtResource("4_nmsli")]
 z_index = -1
-position = Vector2(7268, 5926)
+position = Vector2(7268, 5904)
 scale = Vector2(-1, -1)
 
 [node name="Spikes8" parent="Spikes" instance=ExtResource("4_nmsli")]
@@ -550,6 +579,12 @@ texture = ExtResource("6_5ot28")
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Platform/Platform/StaticBody2D"]
 position = Vector2(-2.5, 14.25)
 shape = SubResource("RectangleShape2D_aerfg")
+
+[node name="Area2D" type="Area2D" parent="Platform/Platform/StaticBody2D"]
+
+[node name="CollisionShape2D2" type="CollisionShape2D" parent="Platform/Platform/StaticBody2D/Area2D"]
+position = Vector2(-2.5, 33)
+shape = SubResource("RectangleShape2D_lrvbd")
 
 [node name="MoveUp" type="AnimationPlayer" parent="Platform"]
 libraries = {
@@ -715,6 +750,7 @@ shape = SubResource("RectangleShape2D_betor")
 
 [node name="Respawns" type="Node2D" parent="."]
 position = Vector2(1233, 41)
+script = ExtResource("10_vjtdm")
 
 [node name="Respawn" parent="Respawns" instance=ExtResource("7_pa8r4")]
 position = Vector2(-3, -2)
@@ -728,11 +764,7 @@ position = Vector2(3425, 6702)
 Number = 3
 
 [node name="Respawn4" parent="Respawns" instance=ExtResource("7_pa8r4")]
-position = Vector2(5252, 6382)
-Number = 3
-
-[node name="Respawn5" parent="Respawns" instance=ExtResource("7_pa8r4")]
-position = Vector2(6333, 5599)
+position = Vector2(5583, 6205)
 Number = 3
 
 [node name="2nd Cutscene" type="Area2D" parent="."]
@@ -758,7 +790,7 @@ position = Vector2(0, -72)
 shape = SubResource("RectangleShape2D_5ot28")
 
 [node name="AttackUnlock" type="Area2D" parent="."]
-position = Vector2(6853, 6248)
+position = Vector2(6781, 6248)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="AttackUnlock"]
 position = Vector2(0, -72)
@@ -767,14 +799,24 @@ shape = SubResource("RectangleShape2D_5ot28")
 [node name="Game Fin" parent="." instance=ExtResource("8_l53as")]
 position = Vector2(9324, 5337)
 
-[node name="Collision" parent="Game Fin" index="0"]
-shape = SubResource("RectangleShape2D_vjtdm")
+[node name="Fin" parent="Game Fin/Text" index="0"]
+metadata/_edit_use_anchors_ = true
+
+[node name="at least for now" parent="Game Fin/Text" index="1"]
+metadata/_edit_use_anchors_ = true
+
+[node name="Credits" parent="Game Fin/Text" index="2"]
+metadata/_edit_use_anchors_ = true
+
+[node name="Bye" parent="Game Fin/Text" index="3"]
+metadata/_edit_use_anchors_ = true
 
 [node name="All UIs" type="Control" parent="."]
 layout_mode = 3
 anchors_preset = 0
 offset_right = 40.0
 offset_bottom = 40.0
+metadata/_edit_use_anchors_ = true
 
 [node name="PlayerDock" parent="All UIs" node_paths=PackedStringArray("player") instance=ExtResource("5_5ot28")]
 player = NodePath("../../Player")
@@ -787,6 +829,7 @@ anchor_right = 1.0
 offset_top = -200.0
 grow_horizontal = 2
 color = Color(0, 0, 0, 1)
+metadata/_edit_use_anchors_ = true
 
 [node name="Down" type="ColorRect" parent="All UIs/Cutscene Stuff"]
 anchors_preset = 12
@@ -797,6 +840,7 @@ offset_bottom = 200.0
 grow_horizontal = 2
 grow_vertical = 0
 color = Color(0, 0, 0, 1)
+metadata/_edit_use_anchors_ = true
 
 [node name="1" type="RichTextLabel" parent="All UIs/Cutscene Stuff"]
 offset_right = 1920.0
@@ -813,6 +857,7 @@ horizontal_alignment = 1
 vertical_alignment = 1
 visible_characters = 0
 visible_ratio = 0.0
+metadata/_edit_use_anchors_ = true
 
 [node name="2" type="RichTextLabel" parent="All UIs/Cutscene Stuff"]
 offset_right = 1920.0
@@ -829,16 +874,20 @@ horizontal_alignment = 1
 vertical_alignment = 1
 visible_characters = 0
 visible_ratio = 0.0
+metadata/_edit_use_anchors_ = true
 
 [node name="Pause Menu" type="CanvasLayer" parent="All UIs"]
 
 [node name="Pause Menu" parent="All UIs/Pause Menu" instance=ExtResource("11_5ot28")]
+metadata/_edit_use_anchors_ = true
 
+[connection signal="body_entered" from="Platform/Platform/StaticBody2D/Area2D" to="Player" method="_on_area_2d_body_entered"]
 [connection signal="body_entered" from="2nd Cutscene" to="2nd Cutscene" method="_on_body_entered"]
 [connection signal="body_entered" from="DashUnlock" to="Player" method="_on_dash_unlock_body_entered"]
 [connection signal="body_entered" from="WallUnlock" to="Player" method="_on_wall_unlock_body_entered"]
 [connection signal="body_entered" from="AttackUnlock" to="Player" method="_on_attack_unlock_body_entered"]
 
+[editable path="World"]
 [editable path="Player"]
 [editable path="Player/Hurtbox"]
 [editable path="Player/Hitbox"]
